@@ -6,19 +6,27 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using CustomModules;
+using LogManager;
+using NLog;
 
 namespace Control_Block.ModuleLoaders
 {
     public class JSONModuleBlockMoverRail : JSONModuleLoader
     {
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        internal static void ConfigureLogger(Manager.LogTarget target)
+        {
+            Manager.RegisterLogger(logger, target);
+        }
+
         public override bool CreateModuleForBlock(int blockID, ModdedBlockDefinition def, TankBlock block, JToken data)
         {
+            logger.Trace(data);
             if (data.Type == JTokenType.Object)
             {
                 JObject obj = (JObject)data;
                 try
                 {
-
                     string initializer = base.TryParse(obj, "Type", "BFRailSegment");
 
                     if (initializer == "BFRailSegment")
@@ -36,11 +44,17 @@ namespace Control_Block.ModuleLoaders
                 }
                 catch (Exception e)
                 {
-                    ModuleBlockMover failedModule = block.GetComponent<ModuleBlockMover>();
-                    if (failedModule != null)
+                    logger.Error(e);
+                    logger.Error("Destroying added ModuleBlockMover");
+                    ModuleBMSegment failedModuleRail = block.GetComponent<ModuleBMSegment>();
+                    ModuleBMRail failedModulePiston = block.GetComponent<ModuleBMRail>();
+                    if (failedModuleRail != null)
                     {
-                        UnityEngine.GameObject.Destroy(failedModule);
-                        Console.WriteLine(e);
+                        UnityEngine.GameObject.Destroy(failedModuleRail);
+                    }
+                    if (failedModulePiston != null)
+                    {
+                        UnityEngine.GameObject.Destroy(failedModulePiston);
                     }
                     return false;
                 }
@@ -92,7 +106,7 @@ namespace Control_Block.ModuleLoaders
 
             if (data.TryGetValue("StartAP", out JToken startAP) && startAP.Type == JTokenType.Object)
             {
-                Console.WriteLine("Setting Start AP:\n" + startAP.ToString());
+                logger.Trace("Setting Start AP:\n{}", startAP);
                 JObject jObject = startAP as JObject;
                 rail.startAP = new AttachPoint()
                 {
@@ -109,7 +123,7 @@ namespace Control_Block.ModuleLoaders
 
             if (data.TryGetValue("EndAP", out JToken endAP) && endAP.Type == JTokenType.Object)
             {
-                Console.WriteLine("Setting End AP:\n" + endAP.ToString());
+                logger.Trace("Setting End AP:\n{}", endAP);
                 JObject jObject = endAP as JObject;
                 rail.endAP = new AttachPoint()
                 {

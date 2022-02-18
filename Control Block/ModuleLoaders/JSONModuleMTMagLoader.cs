@@ -6,18 +6,27 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Control_Block.Utils;
 using UnityEngine;
+using LogManager;
+using NLog;
 
 namespace Control_Block.ModuleLoaders
 {
     public class JSONModuleMTMagLoader : JSONModuleLoader
-    {
-        public override string GetModuleKey()
+	{
+		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+		internal static void ConfigureLogger(Manager.LogTarget target)
+		{
+			Manager.RegisterLogger(logger, target);
+		}
+
+		public override string GetModuleKey()
         {
             return "ModuleMTMagnet";
         }
 
 		public override bool CreateModuleForBlock(int blockID, ModdedBlockDefinition def, TankBlock block, JToken jToken)
 		{
+			logger.Trace(jToken);
 			if (jToken.Type == JTokenType.Object)
 			{
 				JObject obj = (JObject)jToken;
@@ -49,13 +58,15 @@ namespace Control_Block.ModuleLoaders
                     }
 					return true;
 				}
-				catch (Exception e) {
+				catch (Exception e)
+				{
+					logger.Error(e);
+					logger.Error("Destroying added ModuleBlockMover");
 					ModuleMTMagnet failedMag = block.GetComponent<ModuleMTMagnet>();
 					if (failedMag != null)
 					{
 						UnityEngine.GameObject.Destroy(failedMag);
 					}
-					Console.WriteLine(e);
 					return false;
                 }
 			}

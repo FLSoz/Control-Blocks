@@ -47,9 +47,14 @@
     <Reference Include="LegacyBlockModules">
       <HintPath>..\..\LegacyBlockModules\bin\Debug\LegacyBlockModules.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Steam\steamapps\common\TerraTech\TerraTechWin64_Data\Managed\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.7.13\lib\net45\NLog.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="NuterraSteam">
       <HintPath>..\..\..\..\Steam\steamapps\common\TerraTech\LocalMods\NuterraSteam\NuterraSteam.dll</HintPath>
@@ -59,8 +64,13 @@
       <HintPath>..\..\..\..\Steam\steamapps\common\TerraTech\TerraTechWin64_Data\Managed\Rewired_Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -134,125 +144,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\barrel.obj" />
-    <None Include="Resources\base.obj" />
-    <None Include="Resources\tex_png" />
-    <Resource Include="Blocks\Piston\GeoCorp\GEOp_blockbottom.obj" />
-    <Resource Include="Blocks\Piston\GeoCorp\GEOp_blocktop.obj" />
-    <Resource Include="Blocks\Piston\GeoCorp\GEOp_shaftbottom.obj" />
-    <Resource Include="Blocks\Piston\GeoCorp\GEOp_shafttop.obj" />
+    <None Include="packages.config" />
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>
     </None>
-    <None Include="Blocks\HoverPID\BF_Flight_Computer.obj" />
-    <None Include="Blocks\HoverPID\BF_Flight_Computer_Spinner.obj" />
-    <None Include="Blocks\HoverPID\BF_Hover_PID_png" />
-    <None Include="Blocks\MTMags\mtmag ball collider large.obj" />
-    <None Include="Blocks\MTMags\mtmag ball collider.obj" />
-    <None Include="Blocks\MTMags\mtmag ball large.obj" />
-    <None Include="Blocks\MTMags\mtmag ball.obj" />
-    <None Include="Blocks\MTMags\mtmag fixed.obj" />
-    <None Include="Blocks\MTMags\mtmag swivel large.obj" />
-    <None Include="Blocks\MTMags\mtmag_ball_large._png" />
-    <None Include="Blocks\MTMags\mtmag_ball._png" />
-    <None Include="Blocks\Pads\GCfrictionpadsmall.obj" />
-    <None Include="Blocks\Pads\GCfrictionpadbig.obj" />
-    <None Include="Blocks\Piston\BF\BFpiston.blend" />
-    <None Include="Blocks\Piston\BF\BFp_blockbottom.obj" />
-    <None Include="Blocks\Piston\BF\BFp_blocktop.obj" />
-    <None Include="Blocks\Piston\BF\Rail\bf_rail_piston.blend" />
-    <None Include="Blocks\Piston\BF\Rail\bf_rail_piston_base.obj" />
-    <None Include="Blocks\Piston\BF\Rail\bf_rail_piston_corner.obj" />
-    <None Include="Blocks\Piston\BF\Rail\bf_rail_piston_corner_2.obj" />
-    <None Include="Blocks\Piston\BF\Rail\bf_rail_piston_extension.obj" />
-    <None Include="Blocks\Piston\BF\Rail\bf_rail_piston_extension_2.obj" />
-    <None Include="Blocks\Piston\BF\Rail\bf_rail_piston_head.obj" />
-    <None Include="Blocks\Piston\BF\Rail\bf_rail_piston_wedge.obj" />
-    <None Include="Blocks\Piston\BF\Rail\bf_rail_piston_wedge_2.obj" />
-    <None Include="Blocks\Piston\GeoCorp\GEO_piston.blend" />
-    <None Include="Blocks\Piston\GSO\piston.blend" />
-    <None Include="Blocks\Piston\HE\HEp_blockbottom.obj" />
-    <None Include="Blocks\Piston\HE\HEp_blocktop.obj" />
-    <None Include="Blocks\Piston\HE\HEp_shaftbottom.obj" />
-    <None Include="Blocks\Piston\HE\HEp_shaftmidb.obj" />
-    <None Include="Blocks\Piston\HE\HEp_shaftmidt.obj" />
-    <None Include="Blocks\Piston\HE\HEp_shafttop.obj" />
-    <None Include="Blocks\Piston\HE\HE_piston.blend" />
-    <None Include="Blocks\Piston\HE\Panel\HEps_base.obj" />
-    <None Include="Blocks\Piston\HE\Panel\HEps_deco_base.obj" />
-    <None Include="Blocks\Piston\HE\Panel\HEps_deco_head.obj" />
-    <None Include="Blocks\Piston\HE\Panel\HEps_deco_shaft.obj" />
-    <None Include="Blocks\Piston\HE\Panel\HEps_head.obj" />
-    <None Include="Blocks\Piston\HE\Panel\HEps_shaft_1.obj" />
-    <None Include="Blocks\Piston\HE\Panel\HEps_shaft_2.obj" />
-    <None Include="Blocks\Piston\HE\Panel\HEps_shaft_3.obj" />
-    <None Include="Blocks\Piston\HE\Panel\pistonblock he panel deco._png" />
-    <None Include="Blocks\Piston\HE\Panel\pistonblock he panel._png" />
-    <None Include="Blocks\Piston\RR\rr floating piston base.obj" />
-    <None Include="Blocks\Piston\RR\rr floating piston head.obj" />
-    <None Include="Blocks\Piston\VEN\ven twist piston base.obj" />
-    <None Include="Blocks\Piston\VEN\ven twist piston head.obj" />
-    <None Include="Blocks\Piston\VEN\ven twist piston shaft 1.obj" />
-    <None Include="Blocks\Piston\VEN\ven twist piston shaft 2.obj" />
-    <None Include="Blocks\Piston\VEN\ven twist piston.blend" />
-    <None Include="Blocks\Piston\VEN\ven_twist_piston._png" />
-    <None Include="Blocks\Swivel\Double\swivel.blend" />
-    <None Include="Blocks\Swivel\Double\swivelblock he._png" />
-    <None Include="Blocks\Swivel\Double\swivel_double_base.obj" />
-    <None Include="Blocks\Swivel\Double\swivel_double_head.obj" />
-    <None Include="Blocks\Swivel\Inline\rr_inline_swivel._png" />
-    <None Include="Blocks\Swivel\Inline\Swivel ven.blend" />
-    <None Include="Blocks\Swivel\Inline\swivel_rr_base.obj" />
-    <None Include="Blocks\Swivel\Inline\swivel_rr_head.obj" />
-    <None Include="Blocks\Swivel\Inline\swivel_ven_base.obj" />
-    <None Include="Blocks\Swivel\Inline\swivel_ven_head.obj" />
-    <None Include="Blocks\Swivel\Medium\swivel.blend" />
-    <None Include="Blocks\Swivel\Medium\swivel_base.obj" />
-    <None Include="Blocks\Swivel\Medium\swivel_head.obj" />
-    <None Include="Blocks\Swivel\Small\swivel.blend" />
-    <None Include="Blocks\Swivel\Small\swivel_small_base.obj" />
-    <None Include="Blocks\Swivel\Small\swivel_small_head.obj" />
-    <None Include="mod.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <Resource Include="Blocks\SteeringRegulator\sr.obj" />
-    <Resource Include="Blocks\Piston\GSO\piston_base.obj" />
-    <Resource Include="Blocks\Piston\GSO\piston_head.obj" />
-    <Resource Include="Blocks\Piston\GSO\piston_shaft.obj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Blocks\Piston\HE\HEp_icon._png" />
-    <None Include="Blocks\Piston\GeoCorp\GEOp_icon._png" />
-    <Resource Include="Blocks\SteeringRegulator\sr_png" />
-    <None Include="Blocks\Piston\GSO\piston_icon._png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Blocks\Piston\BF\Rail\bf rail piston._png" />
-    <None Include="Blocks\Piston\BF\Rail\bf rail segment corner large._png" />
-    <None Include="Blocks\Piston\BF\Rail\bf rail segment corner._png" />
-    <None Include="Blocks\Piston\BF\Rail\bf rail segment long._png" />
-    <None Include="Blocks\Piston\BF\Rail\bf rail segment streamline large._png" />
-    <None Include="Blocks\Piston\BF\Rail\bf rail segment streamline._png" />
-    <None Include="Blocks\Piston\BF\Rail\bf rail segment._png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Blocks\Swivel\Inline\swivel_ven_png" />
-    <Resource Include="Blocks\Swivel\Medium\swivel_png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Blocks\Swivel\Small\swivel_small_png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Blocks\Piston\BF\BFp._png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Blocks\Pads\friction pad gc small._png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Blocks\Pads\friction pad gc big,_png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Blocks\Piston\RR\rr floating piston._png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\TechComponentInjector\TechComponentInjector\TechComponentInjector.csproj">
@@ -265,9 +160,6 @@
       <Name>LogManager</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\tex.png" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>del *.pdb
@@ -276,8 +168,12 @@
 set modpath="E:\Steam\steamapps\common\TerraTech\LocalMods\Control Blocks\"
 set unitypath="E:\Documents\Unity\Projects\TT Modding\Assets\Mods\Control Blocks\"
 
-for %25%25I in (*) do if not "%25%25I" =="$(TargetFileName)" (
-del "%25%25I"
+for %25%25I in (*) do (
+  if not "%25%25I" =="$(TargetFileName)" (
+    if not "%25%25I" == "LogManager.dll" (
+      del "%25%25I"
+    )
+  )
 )
 
 if not exist !modpath! (
@@ -285,13 +181,23 @@ echo Creating mod folder
 mkdir !modpath!
 )
 
-echo Copying to game
 set e=$(TargetDir)..\&gt;nul
+
+echo Copying to game
 xcopy /S /Y /R "$(TargetFileName)" !modpath!
+if not "$(TargetFileName)" == "LogManager.dll" (
+  xcopy /S /Y /R "LogManager.dll" !modpath!
+)
 
 echo Copying to Unity
-set e=$(TargetDir)..\&gt;nul
-xcopy /S /Y /R "$(TargetFileName)" !unitypath!</PostBuildEvent>
+xcopy /S /Y /R "$(TargetFileName)" !unitypath!
+if not "$(TargetFileName)" == "LogManager.dll" (
+  xcopy /S /Y /R "LogManager.dll" !unitypath!
+)
+
+if not "$(TargetFileName)" == "LogManager.dll" (
+  del "LogManager.dll"
+)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using LogManager;
+using NLog;
 
 namespace Control_Block
 {
+    [Serializable]
     public class InputOperator // Stackable list of operations to peform
     {
         public struct UIDispOperation

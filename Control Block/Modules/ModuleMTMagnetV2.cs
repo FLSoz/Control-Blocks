@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using LogManager;
+using NLog;
 
 namespace Control_Block
 {

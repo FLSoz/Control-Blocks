@@ -8,6 +8,8 @@ using System.Runtime.CompilerServices;
 using HarmonyLib;
 using UnityEngine;
 using Rewired;
+using LogManager;
+using NLog;
 
 namespace Control_Block
 {

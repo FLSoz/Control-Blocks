@@ -6,13 +6,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using UnityEngine;
+using LogManager;
+using NLog;
 
 namespace Control_Block.ModuleLoaders
 {
     public class JSONModuleBlockMoverSwivel : JSONModuleLoader
     {
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        internal static void ConfigureLogger(Manager.LogTarget target)
+        {
+            Manager.RegisterLogger(logger, target);
+        }
+
         public override bool CreateModuleForBlock(int blockID, ModdedBlockDefinition def, TankBlock block, JToken data)
         {
+            logger.Trace(data);
             if (data.Type == JTokenType.Object)
             {
                 JObject obj = (JObject)data;
@@ -28,11 +37,12 @@ namespace Control_Block.ModuleLoaders
                 }
                 catch (Exception e)
                 {
+                    logger.Error(e);
+                    logger.Error("Destroying added ModuleBlockMover");
                     ModuleBlockMover failedModule = block.GetComponent<ModuleBlockMover>();
                     if (failedModule != null)
                     {
                         UnityEngine.GameObject.Destroy(failedModule);
-                        Console.WriteLine(e);
                     }
                     return false;
                 }

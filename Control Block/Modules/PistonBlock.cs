@@ -1,5 +1,7 @@
 ﻿using System;
 using UnityEngine;
+using LogManager;
+using NLog;
 
 namespace Control_Block
 {

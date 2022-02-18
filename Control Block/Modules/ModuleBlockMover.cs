@@ -3,11 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using TechComponentInjector;
+using LogManager;
+using NLog;
 
 namespace Control_Block
 {
     public class ModuleBlockMover : Module, TechAudio.IModuleAudioProvider
     {
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        internal static void ConfigureLogger()
+        {
+            Manager.LogConfig config = new Manager.LogConfig
+            {
+                layout = "${longdate} | ${level:uppercase=true:padding=-5:alignmentOnTruncation=left} | ${logger:shortName=true} | ${message}  ${exception}",
+                keepOldFiles = false,
+                defaultMinLevel = ControlBlocksMod.logLevel,
+                path = ControlBlocksMod.ModLogsDir
+            };
+            Manager.RegisterLogger(logger, config);
+        }
+
         internal class ModuleBMPart : Module
         {
             public ModuleBlockMover parent;
@@ -380,7 +395,7 @@ namespace Control_Block
             return new Vector3(posCurves[Mod].Evaluate(Position), posCurves[Mod + 1].Evaluate(Position), posCurves[Mod + 2].Evaluate(Position));
         }
 
-        internal void OnPool() //Creation
+        public virtual void OnPool() //Creation
         {
             GrabbedBlocks = new List<TankBlock>();
             GrabbedBlockMovers = new List<ModuleBlockMover>();
@@ -402,7 +417,7 @@ namespace Control_Block
                     if (seenFirst)
                     {
                         parts[I] = transform;
-                        Console.WriteLine($"Setting GO {parts[I].name} as part {I}");
+                        logger.Trace($"Setting GO {parts[I].name} as part {I}");
                         I++;
                     }
                     seenFirst = true;
@@ -679,14 +694,14 @@ namespace Control_Block
             }
             catch (Exception E)
             {
-                Console.WriteLine(E);
+                logger.Error(E);
                 if (Holder == null)
-                    Console.WriteLine("Holder is NULL!");
+                    logger.Error("Holder is NULL!");
                 foreach (var descriptor in typeof(ModuleBlockMover).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic))
                 {
                     string name = descriptor.Name;
                     object value = descriptor.GetValue(this);
-                    Console.WriteLine("{0}={1}", name, value);
+                    logger.Debug("{0}={1}", name, value);
                 }
             }
             oldMoverType = moverType;
@@ -837,7 +852,15 @@ namespace Control_Block
             Dirty = true;
             if (Deserialized) return;
 
-            ProcessOperations.Clear();
+            if (ProcessOperations != null)
+            {
+                ProcessOperations.Clear();
+            }
+            else
+            {
+                ProcessOperations = new List<InputOperator>();
+            }
+
             if (IsPlanarVALUE)
             {
                 ProcessOperations.Add(new InputOperator() { m_InputKey = KeyCode.RightArrow, m_InputType = InputOperator.InputType.WhileHeld, m_InputParam = 0, m_OperationType = InputOperator.OperationType.ShiftPos, m_Strength = 1 });
@@ -873,6 +896,7 @@ namespace Control_Block
 
         private void OnRecycle() //Put back to Object Pool
         {
+            ProcessOperations.Clear();
             Deserialized = false;
         }
 
@@ -898,12 +922,12 @@ namespace Control_Block
 
         internal void Attach()
         {
-            Console.WriteLine("ModuleBlockMover Attach");
+            logger.Info("ModuleBlockMover Attach");
             block.tank.AttachEvent.Subscribe(tankAttachBlockAction);
             block.tank.DetachEvent.Subscribe(tankDetachBlockAction);
-            Console.WriteLine("ModuleBlockMover expects TechPhysicsReset");
+            logger.Info("ModuleBlockMover expects TechPhysicsReset");
             block.tank.GetComponent<TechComponentInjector.TechPhysicsReset>().Subscribe(PreResetPhysics, PostResetPhysics);
-            Console.WriteLine("TechPhysicsReset present");
+            logger.Info("TechPhysicsReset present");
             block.tank.TechAudio.AddModule<ModuleBlockMover>(this);
             if (startblockpos.Length != 0) CreateHolder();
             SetDirty();
@@ -977,9 +1001,9 @@ namespace Control_Block
             return "";
         }
 
-        public void Print(string Message)
+        private void Print(string Message)
         {
-            Console.WriteLine(GetDateTime("CB(", "): ") + Message);
+            logger.Trace(GetDateTime("CB(", "): ") + Message);
         }
 
         internal void CleanDirty()
@@ -1312,12 +1336,12 @@ namespace Control_Block
                         //    EXTENTLIMIT
                         case "EXT": _EXTENTLIMIT = float.Parse(value); break;
 
-                        default: Console.WriteLine("SetValuesFromCommentedString : Unknown line " + s); break;
+                        default: logger.Error("SetValuesFromCommentedString : Unknown line " + s); break;
                     }
                 }
                 catch (Exception E)
                 {
-                    Console.WriteLine("SetValuesFromCommentedString : Failed to parse line " + s + " (" + value + ")\n" + E.Message);
+                    logger.Error("SetValuesFromCommentedString : Failed to parse line " + s + " (" + value + ")\n" + E.Message);
                 }
             }
             SetDirty();
@@ -1345,13 +1369,13 @@ namespace Control_Block
 
         private static void SyncPlayer(NetPlayer player)
         {
-            Console.WriteLine("A PLAYER HAS JOINED : " + player.name + "\nIncrementing GlobalSyncByte");
+            logger.Info("A PLAYER HAS JOINED : " + player.name + "\nIncrementing GlobalSyncByte");
             GlobalPlayerSyncByte++;
         }
 
         private static void SyncPlayerRemoved(NetPlayer player)
         {
-            Console.WriteLine("A PLAYER HAS BEEN REMOVED : " + player.name + "\nIncrementing GlobalSyncByte");
+            logger.Info("A PLAYER HAS BEEN REMOVED : " + player.name + "\nIncrementing GlobalSyncByte");
             GlobalPlayerSyncByte++;
         }
 
@@ -1379,7 +1403,7 @@ namespace Control_Block
         {
             VALUE = data.value;
             LastSentVELOCITY = data.velocity;
-            //Console.WriteLine($"Received new blockmover change: {block.cachedLocalPosition} set to {VALUE} with velocity {LastSentVELOCITY}");
+            //logger.Info($"Received new blockmover change: {block.cachedLocalPosition} set to {VALUE} with velocity {LastSentVELOCITY}");
         }
 
         public class BlockMoverMessage : UnityEngine.Networking.MessageBase

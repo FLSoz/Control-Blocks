@@ -4,18 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using LogManager;
+using NLog;
 
 namespace Control_Block.ModuleLoaders
 {
     public class JSONModulePIDLoader : JSONModuleLoader
     {
-        public override string GetModuleKey()
+		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+		internal static void ConfigureLogger(Manager.LogTarget target)
+		{
+			Manager.RegisterLogger(logger, target);
+		}
+
+		public override string GetModuleKey()
         {
             return "ModulePID";
         }
 
 		public override bool CreateModuleForBlock(int blockID, ModdedBlockDefinition def, TankBlock block, JToken jToken)
 		{
+			logger.Trace(jToken);
 			if (jToken.Type == JTokenType.Object)
 			{
 				JObject obj = (JObject)jToken;
@@ -81,13 +90,14 @@ namespace Control_Block.ModuleLoaders
 					}
 				}
 				catch (Exception e)
-                {
+				{
+					logger.Error(e);
+					logger.Error("Destroying added ModuleBlockMover");
 					ModulePID failedComponent = block.GetComponent<ModulePID>();
 					if (failedComponent != null)
 					{
 						UnityEngine.GameObject.Destroy(failedComponent);
 					}
-					Console.WriteLine(e);
 					return false;
 				}
 				return true;

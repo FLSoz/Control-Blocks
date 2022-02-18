@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.Runtime.Serialization;
+using LogManager;
+using NLog;
 
 namespace Control_Block
 {

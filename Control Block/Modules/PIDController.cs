@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.Reflection;
+using LogManager;
+using NLog;
 
 // compile with: -doc:DocFileName.xml
 

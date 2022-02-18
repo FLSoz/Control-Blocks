@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using LogManager;
+using NLog;
 
 namespace Control_Block
 {
     public class ModuleBMRail : ModuleBlockMover
     {
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        internal static void ConfigureLogger(Manager.LogTarget target)
+        {
+            Manager.RegisterLogger(logger, target);
+        }
+
         public void PrePool()
         {
             rotType = 1;
@@ -39,16 +47,16 @@ namespace Control_Block
             TankBlock Segment = LastAP.GetBlockAtPos(LastBlock, blockMan);
             while (Segment != null)
             {
-                Print(">> Found block " + Segment.cachedLocalPosition);
+                logger.Info(">> Found block {} at {}", Segment.name, Segment.cachedLocalPosition);
                 ModuleBMSegment component = Segment.GetComponent<ModuleBMSegment>();
                 if (component == null) // Not a rail segment
                 {
-                    Print("   Not a segment");
+                    logger.Info("   Not a segment");
                     ModuleBMRail opposer = Segment.GetComponent<ModuleBMRail>();
                     if (opposer == null || !LastAP.CanConnect(LastBlock, Segment, opposer.starterAnim)) // Not an opposing rail, or not sharing 
                         break;
                     // Cut shared rail in half to prevent overlap
-                    Print("   Is another head!");
+                    logger.Info("   Is another head!");
                     CutSegmentListInHalf(); 
                     TrueLimitVALUE = HalfLimitVALUE - 0.5f; // Move back .5 for block-room on the AP
                     break;
@@ -56,7 +64,7 @@ namespace Control_Block
 
                 if (component.blockMoverHeadType != m_thisHeadType)//component.blockMoverHeadType.Contains(m_thisHeadType))
                 {
-                    Print("   Wrong rail type!");
+                    logger.Info("   Wrong rail type!");
                     break; // A different rail system
                 }
 
@@ -73,7 +81,7 @@ namespace Control_Block
                     Length = component.startAP.AddToAnimCurves(Quaternion.Inverse(OriginalRot) * _Segment.cachedLocalRotation, this, Length, ref TravelQuat, LastAP, component.AnimWeight);//, ref TravelQuat);//, ref TravelRot);
                     Segment = LastAP.GetBlockAtPos(_Segment, blockMan); // Set the new segment, continue
 
-                    Print("   Connected!");
+                    logger.Info("   Connected!");
                     pass = true; // Exit the foreach
                 }
                 if (!pass & LastAP.CanConnect(LastBlock, _Segment, component.endAP))
@@ -85,9 +93,9 @@ namespace Control_Block
                     Length = component.endAP.AddToAnimCurves(Quaternion.Inverse(OriginalRot) * _Segment.cachedLocalRotation, this, Length, ref TravelQuat, LastAP, component.AnimWeight);//, ref TravelQuat);//, ref TravelRot);
                     Segment = LastAP.GetBlockAtPos(_Segment, blockMan); // Set the new segment, continue
 
-                    Print("   Connected!");
+                    logger.Info("   Connected!");
                 }
-                if (Segment == null) Print(">> No more blocks");
+                if (Segment == null) logger.Info(">> No more blocks");
             }
 
             //if (TrueLimitVALUE == 0f) TrueLimitVALUE = 0.25f;
@@ -114,29 +122,34 @@ namespace Control_Block
             return segment.blockMoverHeadType == m_thisHeadType;
         }
 
-        void OnPool()
+        public override void OnPool()
         {
-            Console.WriteLine("Starting pool");
+            logger.Debug("Starting pool");
+            base.OnPool();
+            logger.Debug("Base pool complete");
             m_Segments = new List<ModuleBMSegment>();
             block.DetachEvent.Subscribe(ClearSegmentList);
             block.AttachEvent.Subscribe(ClearSegmentList);
 
-            // TODO: check if works
-            /* this.starterAnim = new AttachPoint()
+            Transform prefab = base.transform.GetOriginalPrefab<Transform>();
+            if (prefab != null)
             {
-                apPos = Vector3.up * 0.5f,
-                blockPos = IntVector3.up,
-                apDirForward = Vector3.up,
-                apDirUp = Vector3.forward,
-                AnimLength = 0.5f,
-                AnimPosChange = Vector3.up * 0.5f,
-                Tangent = Vector3.up
-            }; */
-            // Console.WriteLine("Getting ID");
-            // int blockSessionID = ManMods.inst.GetBlockID(this.name);
-            // Console.WriteLine($"Fetching prefab anim for block {this.name} with ID {blockSessionID}");
-            // starterAnim = ManSpawn.inst.GetBlockPrefab((BlockTypes)blockSessionID).GetComponent<ModuleBMRail>().starterAnim;
-            Console.WriteLine(this.starterAnim);
+                logger.Debug("Fetched original prefab: {}", prefab.name);
+            }
+            else
+            {
+                logger.Error("FAILED to find original prefab");
+            }
+            ModuleBMRail prefabModule = prefab.GetComponent<ModuleBMRail>();
+            if (this.starterAnim == null)
+            {
+                logger.Error("StarterAnim is EMPTY!");
+                this.starterAnim = prefabModule.starterAnim;
+                if (this.starterAnim == null)
+                {
+                    logger.Error("FAILED to get prefab StarterAnim");
+                }
+            }
             // Unity refused to serialize the type, despite efforts, so I'm using this workaround
         }
 
@@ -171,6 +184,12 @@ namespace Control_Block
 
     public class ModuleBMSegment : Module
     {
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        internal static void ConfigureLogger(Manager.LogTarget target)
+        {
+            Manager.RegisterLogger(logger, target);
+        }
+
         /// <summary>
         /// The weight of the positional curve smoothing
         /// </summary>
@@ -228,21 +247,21 @@ namespace Control_Block
         private void WakeupAP(AttachPoint ap, BlockManager blockman)
         {
             var other = ap.GetBlockAtPos(block, blockman);
-            Console.WriteLine("Got neighbor block");
+            logger.Debug("Got neighbor block");
             if (other == null) return;
-            Console.WriteLine("Neighbor is not null");
+            logger.Debug("Neighbor is not null");
             var segment = other.GetComponent<ModuleBMSegment>();
             if (segment == null || segment.blockMoverPointer == null) return;
-            Console.WriteLine("Neighbor has ModuleBMSegment");
+            logger.Debug("Neighbor has ModuleBMSegment");
             segment.blockMoverPointer.SetDirty(); // This is to fix the bug with rails not being picked up as they are placed
         }
 
         private void WakeupRailSystem()
         {
-            Console.WriteLine("Waking up system");
+            logger.Debug("Waking up system");
             ClearPointer();
             BlockManager blockman = block.tank.blockman;
-            Console.WriteLine("Iterating over APs");
+            logger.Debug("Iterating over APs");
 
             this.WakeupAP(this.startAP, blockman);
             this.WakeupAP(this.endAP, blockman);
@@ -250,7 +269,7 @@ namespace Control_Block
 
         void OnPool()
         {
-            Console.WriteLine("Starting pool");
+            logger.Debug("Starting pool");
             block.DetachEvent.Subscribe(ClearPointer);
            
             block.AttachEvent.Subscribe(WakeupRailSystem);
@@ -258,8 +277,34 @@ namespace Control_Block
             // int blockSessionID = ManMods.inst.GetBlockID(this.name);
             // APs = ManSpawn.inst.GetBlockPrefab((BlockTypes)blockSessionID).GetComponent<ModuleBMSegment>().APs;
             // Unity refused to serialize the array, despite efforts, so I'm using this workaround
-            Console.WriteLine(this.startAP);
-            Console.WriteLine(this.endAP);
+            Transform prefab = base.transform.GetOriginalPrefab<Transform>();
+            if (prefab != null)
+            {
+                logger.Debug("Fetched original prefab: {}", prefab.name);
+            }
+            else
+            {
+                logger.Error("FAILED to find original prefab");
+            }
+            ModuleBMSegment prefabModule = prefab.GetComponent<ModuleBMSegment>();
+            if (this.startAP == null)
+            {
+                logger.Error("StartAP is MISSING!");
+                this.startAP = prefabModule.startAP;
+                if (this.startAP == null)
+                {
+                    logger.Error("FAILED to get prefab StartAP");
+                }
+            }
+            if (this.endAP == null)
+            {
+                logger.Error("EndAP is MISSING!");
+                this.endAP = prefabModule.endAP;
+                if (this.endAP == null)
+                {
+                    logger.Error("FAILED to get prefab EndAP");
+                }
+            }
         }
     }
 
@@ -267,39 +312,47 @@ namespace Control_Block
     /// An animation-appender in the format of 'From -> To'
     /// </summary>
     [Serializable]
-    public struct AttachPoint
+    public class AttachPoint
     {
         /// <summary>
         /// For if the animation involves curves
         /// </summary>
+        [SerializeField]
         public bool DisableFreeJoint;
         /// <summary>
         /// The new position, moving from the apPos
         /// </summary>
+        [SerializeField]
         public Vector3 AnimPosChange;
         /// <summary>
         /// How long this block is, to the animation and to the max value
         /// </summary>
+        [SerializeField]
         public float AnimLength;
         /// <summary>
         /// The final direction, for curve smoothing
         /// </summary>
+        [SerializeField]
         public Vector3 Tangent;
         /// <summary>
         /// The block at apPos, for use with the BlockManager
         /// </summary>
+        [SerializeField]
         public IntVector3 blockPos;
         /// <summary>
         /// The center of the starter attach point
         /// </summary>
+        [SerializeField]
         public Vector3 apPos;
         /// <summary>
         /// The axis at which two APs should face eachother
         /// </summary>
+        [SerializeField]
         public IntVector3 apDirForward;
         /// <summary>
         /// The acis at which two APs should be coplanar
         /// </summary>
+        [SerializeField]
         public IntVector3 apDirUp;
 
         public TankBlock GetBlockAtPos(TankBlock thisBlock, BlockManager blockMan)

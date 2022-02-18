@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using Newtonsoft.Json.Linq;
+using LogManager;
+using NLog;
 using System.Reflection;
 using CustomModules;
 
@@ -13,8 +14,15 @@ namespace Control_Block.ModuleLoaders
 {
     public class JSONModuleBlockMoverPiston : JSONModuleLoader
     {
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        internal static void ConfigureLogger(Manager.LogTarget target)
+        {
+            Manager.RegisterLogger(logger, target);
+        }
+
         public override bool CreateModuleForBlock(int blockID, ModdedBlockDefinition def, TankBlock block, JToken data)
         {
+            logger.Trace(data);
             if (data.Type == JTokenType.Object)
             {
                 JObject obj = (JObject) data;
@@ -30,11 +38,12 @@ namespace Control_Block.ModuleLoaders
                 }
                 catch (Exception e)
                 {
+                    logger.Error(e);
+                    logger.Error("Destroying added ModuleBlockMover");
                     ModuleBlockMover failedModule = block.GetComponent<ModuleBlockMover>();
                     if (failedModule != null)
                     {
                         UnityEngine.GameObject.Destroy(failedModule);
-                        Console.WriteLine(e);
                     }
                     return false;
                 }
@@ -272,8 +281,20 @@ namespace Control_Block.ModuleLoaders
             {
                 lineRenderer = piston.gameObject.AddComponent<SimpleConnectLineRenderer>();
             }
+
+            GameObject parentGO = piston.gameObject;
+            GameObject pistonHead = null;
+            for (int i = 0; i < parentGO.transform.childCount; i++)
+            {
+                Transform child = parentGO.transform.GetChild(i);
+                if (child.name.Contains("BlockMover"))
+                {
+                    pistonHead = child.gameObject;
+                }
+            }
+
             // set refObj to be the second BlockMover Part
-            lineRenderer.refObj = null;
+            lineRenderer.refObj = pistonHead;
             lineRenderer.strPos = new Vector3(0f, 0.3f, 0f);
             lineRenderer.refPos = new Vector3(0f, 0.4f, 0f);
             lineRenderer.width = 0.6f;
