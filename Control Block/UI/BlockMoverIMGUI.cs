@@ -82,7 +82,7 @@ namespace Control_Block
                 try
                 {
                     module = Singleton.Manager<ManPointer>.inst.targetVisible.block;
-                    Log = Class1.LogAllComponents(module.transform);
+                    Log = LogAllComponents(module.transform);
                 }
                 catch
                 {
@@ -94,7 +94,7 @@ namespace Control_Block
             }
             if (module != null && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Semicolon))
             {
-                Console.WriteLine(Class1.LogAllComponents(module.transform, true));
+                Console.WriteLine(LogAllComponents(module.transform, true));
             }
 
             GUIOverseer.CheckValid();
@@ -135,6 +135,28 @@ namespace Control_Block
             GUILayout.Label(Log);
             GUILayout.EndScrollView();
             GUI.DragWindow();
+        }
+
+        public static string LogAllComponents(Transform SearchIn, bool Reflection = false, string Indenting = "")
+        {
+            string result = "";
+            Component[] c = SearchIn.GetComponents<Component>();
+            foreach (Component comp in c)
+            {
+                result += "\n" + Indenting + comp.name + " : " + comp.GetType().Name;
+                if (comp is MeshRenderer renderer) result += " : Material (" + renderer.material.name + ")";
+                if (comp is Animation anim)
+                {
+                    var clipc = anim.GetClipCount();
+                    result += $" : Animation ({clipc} clips)";
+                }
+            }
+            for (int i = SearchIn.transform.childCount - 1; i >= 0; i--)
+            {
+                Transform child = SearchIn.transform.GetChild(i);
+                result += LogAllComponents(child, Reflection, Indenting + "  ");
+            }
+            return result;
         }
     }
 

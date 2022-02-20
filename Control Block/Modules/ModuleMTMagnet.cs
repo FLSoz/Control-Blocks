@@ -35,6 +35,59 @@ namespace Control_Block
         public Vector3 GetEffector => block.transform.rotation * Effector;
         private Vector3 GetEffectorOffsetDownBy10 => block.transform.rotation * (Effector + Vector3.down * 10f);
 
+        internal static void CBallJoint(ModuleMTMagnet origin, ModuleMTMagnet body)
+        {
+            var Joint = origin.block.tank.gameObject.AddComponent<ConfigurableJoint>();
+            Joint.autoConfigureConnectedAnchor = false;
+            Joint.anchor = origin.LocalPosWithEffector;
+            Joint.connectedAnchor = body.LocalPosWithEffector;
+            Joint.enableCollision = true;
+            Joint.connectedBody = body.block.tank.rbody;
+            Joint.xMotion = ConfigurableJointMotion.Locked;
+            Joint.yMotion = ConfigurableJointMotion.Locked;
+            Joint.zMotion = ConfigurableJointMotion.Locked;
+            Joint.angularXMotion = ConfigurableJointMotion.Free;
+            Joint.angularYMotion = ConfigurableJointMotion.Free;
+            Joint.angularZMotion = ConfigurableJointMotion.Free;
+            origin.joint = Joint;
+        }
+
+        internal static void CFixedJoint(ModuleMTMagnet origin, ModuleMTMagnet body)
+        {
+            var Joint = origin.block.tank.gameObject.AddComponent<ConfigurableJoint>();
+            Joint.autoConfigureConnectedAnchor = false;
+            Joint.anchor = origin.LocalPosWithEffector;
+            Joint.connectedAnchor = body.LocalPosWithEffector;
+            Joint.enableCollision = true;
+            Joint.connectedBody = body.block.tank.rbody;
+            Joint.xMotion = ConfigurableJointMotion.Locked;
+            Joint.yMotion = ConfigurableJointMotion.Locked;
+            Joint.zMotion = ConfigurableJointMotion.Locked;
+            Joint.angularXMotion = ConfigurableJointMotion.Locked;
+            Joint.angularYMotion = ConfigurableJointMotion.Locked;
+            Joint.angularZMotion = ConfigurableJointMotion.Locked;
+            origin.joint = Joint;
+        }
+
+        internal static void CSwivelJoint(ModuleMTMagnet origin, ModuleMTMagnet body)
+        {
+            var Joint = origin.block.tank.gameObject.AddComponent<ConfigurableJoint>();
+            Joint.autoConfigureConnectedAnchor = false;
+            Joint.anchor = origin.LocalPosWithEffector;
+            Joint.axis = origin.transform.up;
+            Joint.secondaryAxis = -body.transform.up;
+            Joint.connectedAnchor = body.LocalPosWithEffector;
+            Joint.enableCollision = true;
+            Joint.connectedBody = body.block.tank.rbody;
+            Joint.xMotion = ConfigurableJointMotion.Locked;
+            Joint.yMotion = ConfigurableJointMotion.Locked;
+            Joint.zMotion = ConfigurableJointMotion.Locked;
+            Joint.angularXMotion = ConfigurableJointMotion.Free;
+            Joint.angularYMotion = ConfigurableJointMotion.Locked;
+            Joint.angularZMotion = ConfigurableJointMotion.Locked;
+            origin.joint = Joint;
+        }
+
         void OnTriggerStay(Collider other)
         {
             try
@@ -76,14 +129,14 @@ namespace Control_Block
                                     //block.tank.transform.Rotate(transform.localRotation * Vector3.up, angle - Mathf.Round(angle / 90) * 90, Space.Self);
 
                                     //block.tank.transform.position = _BoundBody.block.transform.position + _BoundBody.GetEffector - GetEffector;
-                                    Class1.CFixedJoint(this, _BoundBody);
+                                    CFixedJoint(this, _BoundBody);
                                     break;
                                 }
                             case MTMagTypes.LargeBall:
                             case MTMagTypes.Ball:
                                 {
                                     //block.tank.transform.position = _BoundBody.block.transform.position + _BoundBody.GetEffector - GetEffector;
-                                    Class1.CBallJoint(this, _BoundBody);
+                                    CBallJoint(this, _BoundBody);
                                     break;
                                 }
                             case MTMagTypes.Swivel:
@@ -91,7 +144,7 @@ namespace Control_Block
                                     //var inv2 = Quaternion.Inverse(_BoundBody.transform.rotation);
                                     //block.tank.transform.rotation *= Quaternion.FromToRotation(inv2 * transform.up, inv2 * (-_BoundBody.transform.up));
                                     //block.tank.transform.position = _BoundBody.block.transform.position + _BoundBody.GetEffector - GetEffector;
-                                    Class1.CSwivelJoint(this, _BoundBody);
+                                    CSwivelJoint(this, _BoundBody);
                                     break;
                                 }
                         }

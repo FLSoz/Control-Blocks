@@ -44,9 +44,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Steam\steamapps\common\TerraTech\TerraTechWin64_Data\Managed\DebugWrapper.dll</HintPath>
     </Reference>
-    <Reference Include="LegacyBlockModules">
-      <HintPath>..\..\LegacyBlockModules\bin\Debug\LegacyBlockModules.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -150,6 +147,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Motion-Blocks\Motion Blocks\Motion Blocks.csproj">
+      <Project>{061306fb-50b9-4766-9ec6-26e96ed07f87}</Project>
+      <Name>Motion Blocks</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\TechComponentInjector\TechComponentInjector\TechComponentInjector.csproj">
       <Project>{50a84443-8e82-4060-b2ca-2aa653724548}</Project>
       <Name>TechComponentInjector</Name>

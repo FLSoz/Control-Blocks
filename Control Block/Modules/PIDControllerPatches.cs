@@ -451,35 +451,7 @@ namespace Control_Block
         [HarmonyPatch("FixedUpdate")]
         public class PatchModuleFloater
         {
-            public static bool Prefix(ref MotionBlocks.ModuleFloater __instance)
-            {
-                if (__instance.block.IsAttached && __instance.block.tank != null && !__instance.block.tank.beam.IsActive)
-                {
-                    PIDController pidController = __instance.block.tank.gameObject.GetComponent<PIDController>();
-                    if (pidController)
-                    {
-                        Vector3 blockCenter = __instance.block.centreOfMassWorld;
-                        float blockForce = (__instance.MaxStrength / __instance.MaxHeight) * (__instance.MaxHeight - blockCenter.y)
-                              - __instance.block.tank.rbody.GetPointVelocity(blockCenter).y * __instance.VelocityDampen;
-                        Vector3 force = Vector3.up;
-                        if (__instance.MaxStrength > 0)
-                        {
-                            force *= Mathf.Clamp(blockForce, 0f, __instance.MaxStrength * 1.25f);
-                        }
-                        else
-                        {
-                            force *= Mathf.Clamp(blockForce, __instance.MaxStrength * 1.25f, 0f);
-                        }
-                        __instance.block.tank.rbody.AddForceAtPosition(force, blockCenter, ForceMode.Impulse);
-                        pidController.nonGravityThrust += force;
-
-                        Vector3 localVector = __instance.block.tank.transform.InverseTransformVector(blockCenter);
-                        pidController.nonManagedTorque += Vector3.Cross(localVector, force);
-                        return false;
-                    }
-                }
-                return true;
-            }
+            
         }
 
         // Patch ModuleWing thrust

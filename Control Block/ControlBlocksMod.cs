@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Collections;
+using System.Collections.Generic;
 using HarmonyLib;
 using UnityEngine;
 using System.IO;
@@ -52,7 +54,10 @@ namespace Control_Block
                 logLevelStr = modLevel;
             }
 
-            logLevel = LogLevel.FromString(logLevelStr);
+            if (logLevelStr != null)
+            {
+                logLevel = LogLevel.FromString(logLevelStr);
+            }
             Console.WriteLine($"[ControlBlocks] Logging at level {logLevel}");
         }
 
@@ -146,6 +151,78 @@ namespace Control_Block
 
             ModuleBlockMover.InitiateNetworking();
             harmony.PatchAll(Assembly.GetExecutingAssembly());
+
+            if (HasMotionBlocks(out Type floaterType, out MethodBase floaterFixedUpdate))
+            {
+                PatchMotionBlocks(floaterType, floaterFixedUpdate);
+            }
+        }
+
+        internal static bool HasMotionBlocks(out Type floaterType, out MethodBase floaterFixedUpdate)
+        {
+            IEnumerable<Assembly> assembliesSearch = AppDomain.CurrentDomain.GetAssemblies().Where(assembly => assembly.GetName().Name.Contains("Motion Blocks"));
+            if (assembliesSearch.Count() > 0)
+            {
+                floaterType = assembliesSearch.First().GetType("MotionBlocks.ModuleFloater");
+                floaterFixedUpdate = floaterType.GetMethod("FixedUpdate", BindingFlags.Instance| BindingFlags.Public | BindingFlags.NonPublic);
+
+                MaxStrength = floaterType.GetField("MaxStrength", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                MaxHeight = floaterType.GetField("MaxHeight", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                VelocityDampen = floaterType.GetField("VelocityDampen", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+                return true;
+            }
+            floaterType = null;
+            floaterFixedUpdate = null;
+            return false;
+        }
+
+        internal static void PatchMotionBlocks(Type floaterType, MethodBase floaterFixedUpdate)
+        {
+            logger.Info("Patching Motion Blocks compatibility");
+            MethodInfo prefixMethod = typeof(ControlBlocksMod).GetMethod("PrefixModuleFloater", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+            logger.Info("Fetched generic Prefix function");
+            MethodInfo wrappedPrefixMethod = prefixMethod.MakeGenericMethod(new Type[] { floaterType });
+            logger.Info("Generated constructed prefix function");
+            harmony.Patch(floaterFixedUpdate, prefix: new HarmonyMethod(wrappedPrefixMethod));
+        }
+
+        internal static FieldInfo MaxStrength;
+        internal static FieldInfo MaxHeight;
+        internal static FieldInfo VelocityDampen;
+
+        internal static bool PrefixModuleFloater<T>(ref T __instance)
+        {
+            TankBlock block = (__instance as Module).block;
+            if (block.IsAttached && block.tank != null && !block.tank.beam.IsActive)
+            {
+                PIDController pidController = block.tank.gameObject.GetComponent<PIDController>();
+                if (pidController)
+                {
+                    float velocityDampen = (float) ControlBlocksMod.VelocityDampen.GetValue(__instance);
+                    float maxHeight = (float)ControlBlocksMod.MaxHeight.GetValue(__instance);
+                    float maxStrength = (float)ControlBlocksMod.MaxStrength.GetValue(__instance);
+
+                    Vector3 blockCenter = block.centreOfMassWorld;
+                    float blockForce = (maxStrength / maxHeight) * (maxHeight - blockCenter.y) - block.tank.rbody.GetPointVelocity(blockCenter).y * velocityDampen;
+                    Vector3 force = Vector3.up;
+                    if (maxStrength > 0)
+                    {
+                        force *= Mathf.Clamp(blockForce, 0f, maxStrength * 1.25f);
+                    }
+                    else
+                    {
+                        force *= Mathf.Clamp(blockForce, maxStrength * 1.25f, 0f);
+                    }
+                    block.tank.rbody.AddForceAtPosition(force, blockCenter, ForceMode.Impulse);
+                    pidController.nonGravityThrust += force;
+
+                    Vector3 localVector = block.tank.transform.InverseTransformVector(blockCenter);
+                    pidController.nonManagedTorque += Vector3.Cross(localVector, force);
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
