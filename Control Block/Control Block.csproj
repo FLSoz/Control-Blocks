@@ -53,9 +53,6 @@
       <HintPath>..\packages\NLog.4.7.13\lib\net45\NLog.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="NuterraSteam">
-      <HintPath>..\..\..\..\Steam\steamapps\common\TerraTech\LocalMods\NuterraSteam\NuterraSteam.dll</HintPath>
-    </Reference>
     <Reference Include="Rewired_Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Steam\steamapps\common\TerraTech\TerraTechWin64_Data\Managed\Rewired_Core.dll</HintPath>
@@ -98,6 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ModuleLoaders\CustomParser.cs" />
     <Compile Include="ModuleLoaders\JSONModuleBlockMoverPiston.cs" />
     <Compile Include="ModuleLoaders\JSONModuleBlockMoverRail.cs" />
     <Compile Include="ModuleLoaders\JSONModuleBlockMoverSwivel.cs" />
@@ -147,11 +145,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Motion-Blocks\Motion Blocks\Motion Blocks.csproj">
-      <Project>{061306fb-50b9-4766-9ec6-26e96ed07f87}</Project>
-      <Name>Motion Blocks</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\..\TechComponentInjector\TechComponentInjector\TechComponentInjector.csproj">
       <Project>{50a84443-8e82-4060-b2ca-2aa653724548}</Project>
       <Name>TechComponentInjector</Name>

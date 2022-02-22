@@ -37,10 +37,9 @@ namespace Control_Block.ModuleLoaders
 					mtMag.Identity = base.TryParseEnum<ModuleMTMagnet.MTMagTypes>(obj, "Identity", ModuleMTMagnet.MTMagTypes.Ball);
 					mtMag.TransformCorrection = base.TryParse(obj, "TransformCorrection", mtMag.TransformCorrection);
 					mtMag.VelocityCorrection = base.TryParse(obj, "VelocityCorrection", mtMag.VelocityCorrection);
-					if (obj.TryGetValue("Effector", out JToken jtoken))
-					{
-						mtMag.Effector = CustomParser.GetVector3(jtoken, mtMag.Effector);
-					}
+
+					mtMag.Effector = CustomParser.LenientTryParseVector3(obj, "Effector", mtMag.Effector);
+
 					switch(mtMag.Identity)
                     {
 						case ModuleMTMagnet.MTMagTypes.Ball:

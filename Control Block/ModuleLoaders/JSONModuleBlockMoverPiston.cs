@@ -8,7 +8,6 @@ using UnityEngine;
 using LogManager;
 using NLog;
 using System.Reflection;
-using CustomModules;
 
 namespace Control_Block.ModuleLoaders
 {
@@ -298,7 +297,28 @@ namespace Control_Block.ModuleLoaders
             lineRenderer.strPos = new Vector3(0f, 0.3f, 0f);
             lineRenderer.refPos = new Vector3(0f, 0.4f, 0f);
             lineRenderer.width = 0.6f;
-            lineRenderer.material = TTReferences.FindMaterial("MAT_BF_SkyAnchor_Beam");
+            lineRenderer.material = GetAnchorBeamMat();
+        }
+
+        internal static Material skyAnchorBeamMat = null;
+        internal static Material GetAnchorBeamMat()
+        {
+            if (skyAnchorBeamMat != null)
+            {
+                return skyAnchorBeamMat;
+            }
+            else
+            {
+                foreach (Material mat in Resources.FindObjectsOfTypeAll<Material>())
+                {
+                    if (mat.name == "MAT_BF_SkyAnchor_Beam")
+                    {
+                        skyAnchorBeamMat = mat;
+                        return mat;
+                    }
+                }
+                return null;
+            }
         }
     }
 }

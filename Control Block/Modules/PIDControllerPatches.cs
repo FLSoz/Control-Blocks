@@ -446,14 +446,6 @@ namespace Control_Block
             }
         }
 
-        // Patch floater thrust
-        [HarmonyPatch(typeof(MotionBlocks.ModuleFloater))]
-        [HarmonyPatch("FixedUpdate")]
-        public class PatchModuleFloater
-        {
-            
-        }
-
         // Patch ModuleWing thrust
         [HarmonyPatch(typeof(ModuleWing))]
         [HarmonyPatch("FixedUpdate")]
