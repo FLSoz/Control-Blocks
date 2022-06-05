@@ -1,0 +1,14 @@
+{
+    "ModulePiston": {
+        "Function": "SetGeoCorpPiston"
+    },
+    "NuterraBlock": {
+        "AutoImported": true,
+        "Price": 7323,
+        "HP": 8000,
+        "Mass": 10,
+        "ID": 129380,
+        "Icon": "GEOp_icon.png"
+    },
+    "Recipe": "fuelinjector, sensorytransmitter, plubonicalloy, fuelinjector, fuelinjector, titanicalloy"
+}

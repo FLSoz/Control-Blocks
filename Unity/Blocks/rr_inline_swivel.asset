@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a54d95abee2c3148b540fda745ffee3, type: 3}
+  m_Name: rr_inline_swivel
+  m_EditorClassIdentifier: 
+  m_Corporation: EXP
+  m_BlockIdentifier: 
+  m_BlockDisplayName: R.R. Medium Inline Swivel
+  m_BlockDescription: 'Instead of a massive stepper motor, we lined the inside of
+    this swivel with hovers. No one really knows why it works, but it''s an incredible
+    breakthrough nonetheless.
+
+    (Designed by Rafs!)
+
+    Right click to configure this block.
+
+
+    This is a BlockMover. Blocks attached to the head of this will have their own
+    physics separate from the body they are on, yet still restrained to the same tech.
+    Like a multi-tech, but a single tech. ClusterTech.'
+  m_Grade: 1
+  m_Rarity: 2
+  m_Price: 10000
+  m_Category: 1
+  m_UnlockWithLicense: 1
+  m_PhysicalPrefab: {fileID: 8161857708136886221, guid: 1ad8e54e99818574ba125e9d22fb8fcf,
+    type: 3}
+  m_Icon: {fileID: 2800000, guid: 750840ed98e26e943b9d1366669bc2be, type: 3}
+  m_MaxHealth: 2000
+  m_Mass: 4
+  m_Json: {fileID: 4900000, guid: f7dcf84993ced0944a5302a487e70b35, type: 3}
+  m_DamageableType: 0
+  m_ModuleData: []

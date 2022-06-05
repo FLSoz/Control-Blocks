@@ -1,0 +1,20 @@
+{
+    "ModulePiston": {
+        "Function": "SetHawkeyePanelDecoPiston"
+    },
+    "NuterraBlock": {
+        "AutoImported": true,
+        "Price": 3513,
+        "HP": 3500,
+        "Mass": 2,
+        "ID": 6194711,
+        "CenterOfMass": {
+            "x": 0,
+            "y": 0,
+            "z": -0.4
+        },
+        "DamageableType": "Armour",
+        "Icon": "pistonblock he panel deco.png"
+    },
+    "Recipe": "rubberbrick, sensorytransmitter, plubonicgreebles, hardenedtitanic"
+}

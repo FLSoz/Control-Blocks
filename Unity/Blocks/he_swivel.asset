@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a54d95abee2c3148b540fda745ffee3, type: 3}
+  m_Name: he_swivel
+  m_EditorClassIdentifier: 
+  m_Corporation: HE
+  m_BlockIdentifier: 
+  m_BlockDisplayName: Hawkeye Dual Rotor Swivel
+  m_BlockDescription: 'A swivel with two heads at the top and bottom. They, uh, don''t
+    move separately, they''re on the same axle. If one gets stuck, you will smell
+    burning rubber.
+
+    (Designed by Rafs!)
+
+    Right click to configure this block.
+
+
+    This is a BlockMover. Blocks attached to the head of this will have their own
+    physics separate from the body they are on, yet still restrained to the same tech.
+    Like a multi-tech, but a single tech. ClusterTech.'
+  m_Grade: 3
+  m_Rarity: 2
+  m_Price: 5526
+  m_Category: 1
+  m_UnlockWithLicense: 1
+  m_PhysicalPrefab: {fileID: 619860177347759750, guid: 4ea56a5633ea0fe45b227705f208f651,
+    type: 3}
+  m_Icon: {fileID: 2800000, guid: 59a00444e51a1f74dbfad1a45d05bd81, type: 3}
+  m_MaxHealth: 2000
+  m_Mass: 2
+  m_Json: {fileID: 4900000, guid: c5a35fdc3c99e4445b61ac6380acbd97, type: 3}
+  m_DamageableType: 0
+  m_ModuleData: []

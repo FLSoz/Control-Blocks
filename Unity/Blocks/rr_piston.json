@@ -1,0 +1,15 @@
+{
+    "ModulePiston": {
+        "Function": "SetRRFloatingPiston"
+    },
+    "NuterraBlock": {
+        "AutoImported": true,
+        "Price": 7587,
+        "HP": 600,
+        "Mass": 4,
+        "ID": 1980325,
+        "EmissionMode": "Active",
+        "Icon": "rr floating piston.png"
+    },
+    "Recipe": "hardenedtitanic, fuelinjector, heatcoil, sensorytransmitter, plubonicalloy"
+}

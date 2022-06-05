@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a54d95abee2c3148b540fda745ffee3, type: 3}
+  m_Name: BF_Hover_PID
+  m_EditorClassIdentifier: 
+  m_Corporation: BF
+  m_BlockIdentifier: 
+  m_BlockDisplayName: Altitude Control System
+  m_BlockDescription: After intense development, Better Future finally managed to
+    create an altitude computer. It will take over your control of the vertical throttle
+    to utilize all upward-facing fans and boosters to maintain a target altitude.
+  m_Grade: 1
+  m_Rarity: 0
+  m_Price: 3467
+  m_Category: 5
+  m_UnlockWithLicense: 1
+  m_PhysicalPrefab: {fileID: 4317748038643738727, guid: 7e457565d55865b4bb8d08ab06921c59,
+    type: 3}
+  m_Icon: {fileID: 2800000, guid: 5fa75952a4f167c49931f8ca1442e035, type: 3}
+  m_MaxHealth: 200
+  m_Mass: 3.5
+  m_Json: {fileID: 4900000, guid: 5b77fe4b6ae8f844e83a53c098cbe6f1, type: 3}
+  m_DamageableType: 0
+  m_ModuleData: []

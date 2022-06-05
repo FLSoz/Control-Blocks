@@ -1,0 +1,14 @@
+{
+    "ModulePiston": {
+        "Function": "SetGSOPiston"
+    },
+    "NuterraBlock": {
+        "AutoImported": true,
+        "Price": 4527,
+        "HP": 1000,
+        "Mass": 2.5,
+        "ID": 1293838,
+        "Icon": "piston_icon.png"
+    },
+    "Recipe": "fuelinjector, sensorytransmitter, plubonicalloy"
+}

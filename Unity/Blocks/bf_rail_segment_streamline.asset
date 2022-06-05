@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a54d95abee2c3148b540fda745ffee3, type: 3}
+  m_Name: bf_rail_segment_streamline
+  m_EditorClassIdentifier: 
+  m_Corporation: BF
+  m_BlockIdentifier: 
+  m_BlockDisplayName: Better Future Rail wedge segment
+  m_BlockDescription: '(Travel length: 2) A curved segment for the Better Future Rail
+    Piston, add it to the end of the line to make it bend!'
+  m_Grade: 1
+  m_Rarity: 2
+  m_Price: 2826
+  m_Category: 1
+  m_UnlockWithLicense: 1
+  m_PhysicalPrefab: {fileID: 2584161617851003826, guid: 8c89204037865144bb59b431bf35b768,
+    type: 3}
+  m_Icon: {fileID: 2800000, guid: 3b4b5f7558b035a4c8b12cfb36ba7d8b, type: 3}
+  m_MaxHealth: 800
+  m_Mass: 1
+  m_Json: {fileID: 4900000, guid: f86e07b5f93d0734d8f42f2572a0b40a, type: 3}
+  m_DamageableType: 0
+  m_ModuleData: []

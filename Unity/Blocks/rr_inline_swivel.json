@@ -1,0 +1,13 @@
+{
+    "ModuleSwivel": {
+        "Function": "SetMediumInlineSwivel"
+    },
+    "NuterraBlock": {
+        "AutoImported": true,
+        "Price": 4470,
+        "HP": 2000,
+        "Mass": 4,
+        "ID": 29571436
+    },
+    "Recipe": "fuelinjector, sensorytransmitter, plubonicalloy"
+}

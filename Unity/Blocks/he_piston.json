@@ -1,0 +1,14 @@
+{
+    "ModulePiston": {
+        "Function": "SetHawkeyePiston"
+    },
+    "NuterraBlock": {
+        "AutoImported": true,
+        "Price": 6993,
+        "HP": 2250,
+        "Mass": 5,
+        "ID": 129381,
+        "Icon": "HEp_icon.png"
+    },
+    "Recipe": "fuelinjector, fuelinjector, sensorytransmitter, titanicalloy, plubonicalloy, plubonicalloy"
+}

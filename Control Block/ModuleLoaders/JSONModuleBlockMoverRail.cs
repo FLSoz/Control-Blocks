@@ -13,9 +13,9 @@ namespace Control_Block.ModuleLoaders
     public class JSONModuleBlockMoverRail : JSONModuleLoader
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        internal static void ConfigureLogger(Manager.LogTarget target)
+        internal static void ConfigureLogger(LogTarget target)
         {
-            Manager.RegisterLogger(logger, target);
+            TTLogManager.RegisterLogger(logger, target);
         }
 
         public override bool CreateModuleForBlock(int blockID, ModdedBlockDefinition def, TankBlock block, JToken data)

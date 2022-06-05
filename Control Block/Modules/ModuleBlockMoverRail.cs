@@ -10,9 +10,9 @@ namespace Control_Block
     public class ModuleBMRail : ModuleBlockMover
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        internal static void ConfigureLogger(Manager.LogTarget target)
+        internal static void ConfigureLogger(LogTarget target)
         {
-            Manager.RegisterLogger(logger, target);
+            TTLogManager.RegisterLogger(logger, target);
         }
 
         public void PrePool()
@@ -185,9 +185,9 @@ namespace Control_Block
     public class ModuleBMSegment : Module
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        internal static void ConfigureLogger(Manager.LogTarget target)
+        internal static void ConfigureLogger(LogTarget target)
         {
-            Manager.RegisterLogger(logger, target);
+            TTLogManager.RegisterLogger(logger, target);
         }
 
         /// <summary>

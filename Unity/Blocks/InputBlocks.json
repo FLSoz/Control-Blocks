@@ -1,0 +1,471 @@
+[
+	{
+		"name": "GSO Piston",
+		"ID": 1293838,
+		"Corp": "GSO",
+		"Grade": 2,
+		"Price": 4527,
+		"HP": 1000,
+		"Mass": 2.5,
+		"Unity_ID": "gso_piston",
+		"Recipe": "FuelInjector, SensoryTransmitter, PlubonicAlloy",
+		"Module": {
+			"Name": "ModulePiston",
+			"Function": "SetGSOPiston"
+		},
+		"NuterraBlock": {
+			"Icon": "piston_icon.png"
+		}
+	},
+	{
+		"name": "GeoCorp Large Piston",
+		"ID": 129380,
+		"Corp": "GC",
+		"Grade": 2,
+		"Price": 7323,
+		"HP": 8000,
+		"Mass": 10,
+		"Unity_ID": "geo_piston",
+		"Recipe": "FuelInjector, SensoryTransmitter, PlubonicAlloy, FuelInjector, FuelInjector, TitanicAlloy",
+		"Module": {
+			"Name": "ModulePiston",
+			"Function": "SetGeoCorpPiston"
+		},
+		"NuterraBlock": {
+			"Icon": "GEOp_icon.png"
+		}
+	},
+	{
+		"name": "Hawkeye Telescopic Piston",
+		"ID": 129381,
+		"Corp": "HE",
+		"Grade": 2,
+		"Price": 6993,
+		"HP": 2250,
+		"Mass": 5,
+		"Unity_ID": "he_piston",
+		"Recipe": "FuelInjector, FuelInjector, SensoryTransmitter, TitanicAlloy, PlubonicAlloy, PlubonicAlloy",
+		"Module": {
+			"Name": "ModulePiston",
+			"Function": "SetHawkeyePiston"
+		},
+		"NuterraBlock": {
+			"Icon": "HEp_icon.png"
+		}
+	},
+	{
+		"name": "Hawkeye Armoured Panel Piston",
+		"ID": 6194710,
+		"Corp": "HE",
+		"Grade": 2,
+		"Price": 5283,
+		"HP": 2250,
+		"Mass": 2,
+		"Unity_ID": "he_panel_piston",
+		"Recipe": "FuelInjector, SensoryTransmitter, PlubonicAlloy, TitanicAlloy",
+		"Module": {
+			"Name": "ModulePiston",
+			"Function": "SetHawkeyePanelPiston"
+		},
+		"NuterraBlock": {
+			"CenterOfMass": { "x": 0, "y": 0.5, "z": -0.4 },
+			"DamageableType": "Armour",
+			"Icon": "pistonblock he panel"
+		}
+	},
+	{
+		"name": "Better Piston",
+		"ID": 1293834,
+		"Corp": "BF",
+		"Grade": 0,
+		"Price": 7587,
+		"HP": 2000,
+		"Mass": 3,
+		"Unity_ID": "bf_piston",
+		"Recipe": "HardenedTitanic, FuelInjector, HeatCoil, SensoryTransmitter, PlubonicAlloy",
+		"Module": {
+			"Name": "ModulePiston",
+			"Function": "SetBFPiston"
+		},
+		"NuterraBlock": {
+			"Icon": "BFp.png"
+		}
+	},
+	{
+		"name": "Venture Twist Piston",
+		"ID": 1293837,
+		"Corp": "VEN",
+		"Grade": 0,
+		"Price": 6075,
+		"HP": 1250,
+		"Mass": 1,
+		"Unity_ID": "ven_piston",
+		"Recipe": "PlubonicGreebles, PlubonicGreebles, BlastCaps, FuelInjector, SensoryTransmitter, PlubonicAlloy",
+		"Module": {
+			"Name": "ModulePiston",
+			"Function": "SetVENPiston"
+		},
+		"NuterraBlock": {
+			"Icon": "ven_twist_piston.png"
+		}
+	},
+	{
+		"name": "R.R. Floating Piston",
+		"ID": 1980325,
+		"Corp": "EXP",
+		"Grade": 0,
+		"Price": 7587,
+		"HP": 600,
+		"Mass": 4,
+		"Unity_ID": "rr_piston",
+		"Recipe": "HardenedTitanic, FuelInjector, HeatCoil, SensoryTransmitter, PlubonicAlloy",
+		"NuterraBlock": {
+			"EmissionMode": "Active",
+			"Icon": "rr floating piston.png"
+		},
+		"Module": {
+			"Name": "ModulePiston",
+			"Function": "SetRRFloatingPiston"
+		}
+	},
+	{
+		"name": "Better Future Rail Piston",
+		"ID": 1293835,
+		"Corp": "BF",
+		"Grade": 0,
+		"Price": 6984,
+		"HP": 600,
+		"Fragility": 0.5,
+		"Mass": 1.5,
+		"Unity_ID": "bf_rail_piston",
+		"Recipe": "HardenedTitanic, FuelInjector, HardLightDrive, SensoryTransmitter",
+		"Module": {
+			"Name": "ModuleRail",
+			"Type": "BFRailPiston",
+			"HeadType": "BF_Rail_0"
+		}
+	},
+	{
+		"name": "Better Future Rail segment",
+		"ID": 1293836,
+		"Corp": "BF",
+		"Grade": 0,
+		"Price": 2106,
+		"HP": 500,
+		"Fragility": 0.5,
+		"Mass": 1.5,
+		"Unity_ID": "bf_rail_segment",
+		"Recipe": "HardenedTitanic, HardenedTitanic, CelestianCrystal, CelestianCrystal",
+		"Module": {
+			"Name": "ModuleRail",
+			"Type": "BFRailSegment",
+			"HeadType": "BF_Rail_0",
+			"StartAP": {
+				"AnimLength": 1,
+				"AnimPosChange": {"x": 0, "y": 1, "z": 0},
+				"Tangent": {"x": 0, "y": 1, "z": 0},
+				"apPos": {"x": 0, "y": -0.5, "z": 0},
+				"blockPos": {"x": 0, "y": -1, "z": 0},
+				"apDirForward": {"x": 0, "y": -1, "z": 0},
+				"apDirUp": {"x": 0, "y": 0, "z": 1}
+			},
+			"EndAP": {
+				"AnimLength": 1,
+				"AnimPosChange": {"x": 0, "y": -1, "z": 0},
+				"Tangent": {"x": 0, "y": -1, "z": 0},
+				"apPos": {"x": 0, "y": 0.5, "z": 0},
+				"blockPos": {"x": 0, "y": 1, "z": 0},
+				"apDirForward": {"x": 0, "y": 1, "z": 0},
+				"apDirUp": {"x": 0, "y": 0, "z": 1}
+			}
+		}
+	},
+	{
+		"name": "Better Future Rail long segment",
+		"ID": 1393800,
+		"Corp": "BF",
+		"Grade": 0,
+		"Price": 3879,
+		"HP": 800,
+		"Fragility": 0.5,
+		"Mass": 3,
+		"Unity_ID": "bf_rail_segment_long",
+		"Recipe": "HardenedTitanic, HardenedTitanic, HardenedTitanic, CelestianCrystal, CelestianCrystal, CelestianCrystal, CelestianCrystal",
+		"Module": {
+			"Name": "ModuleRail",
+			"Type": "BFRailSegment",
+			"HeadType": "BF_Rail_0",
+			"StartAP": {
+				"AnimLength": 2,
+				"AnimPosChange": {"x": 0, "y": 2, "z": 0},
+				"Tangent": {"x": 0, "y": 1, "z": 0},
+				"apPos": {"x": 0, "y": -0.5, "z": 0},
+				"blockPos": {"x": 0, "y": -1, "z": 0},
+				"apDirForward": {"x": 0, "y": -1, "z": 0},
+				"apDirUp": {"x": 0, "y": 0, "z": 1}
+			},
+			"EndAP": {
+				"AnimLength": 2,
+				"AnimPosChange": {"x": 0, "y": -2, "z": 0},
+				"Tangent": {"x": 0, "y": -1, "z": 0},
+				"apPos": {"x": 0, "y": 1.5, "z": 0},
+				"blockPos": {"x": 0, "y": 2, "z": 0},
+				"apDirForward": {"x": 0, "y": 1, "z": 0},
+				"apDirUp": {"x": 0, "y": 0, "z": 1}
+			}
+		}
+	},
+	{
+		"name": "Better Future Rail wedge segment",
+		"ID": 1393801,
+		"Corp": "BF",
+		"Grade": 0,
+		"Price": 2826,
+		"HP": 800,
+		"Fragility": 0.5,
+		"Mass": 1,
+		"Unity_ID": "bf_rail_segment_streamline",
+		"Recipe": "HardenedTitanic, HardenedTitanic, CelestianCrystal, CelestianCrystal, CelestianCrystal",
+		"Module": {
+			"Name": "ModuleRail",
+			"Type": "BFRailSegment",
+			"HeadType": "BF_Rail_0",
+			"AnimWeight": 0.13,
+			"StartAP": {
+				"AnimLength": 2,
+				"AnimPosChange": {"x": 0, "y": 0.5, "z": -0.5},
+				"DisableFreeJoint": true,
+				"Tangent": {"x": 0, "y": 0, "z": -1},
+				"apPos": {"x": 0, "y": -0.5, "z": 0},
+				"blockPos": {"x": 0, "y": -1, "z": 0},
+				"apDirForward": {"x": 0, "y": -1, "z": 0},
+				"apDirUp": {"x": 0, "y": 0, "z": 1}
+			},
+			"EndAP": {
+				"AnimLength": 2,
+				"AnimPosChange": {"x": 0, "y": -0.5, "z": 0.5},
+				"DisableFreeJoint": true,
+				"Tangent": {"x": 0, "y": -1, "z": 0},
+				"apPos": {"x": 0, "y": 0, "z": -0.5},
+				"blockPos": {"x": 0, "y": 0, "z": -1},
+				"apDirForward": {"x": 0, "y": 0, "z": -1},
+				"apDirUp":{"x": 0, "y": 1, "z": 0}
+			}
+		}
+	},
+	{
+		"name": "Better Future Rail large wedge segment",
+		"ID": 1393802,
+		"Corp": "BF",
+		"Grade": 0,
+		"Price": 4212,
+		"HP": 1200,
+		"Fragility": 0.5,
+		"Mass": 4.5,
+		"Unity_ID": "bf_rail_segment_streamline_large",
+		"Recipe": "HardenedTitanic, HardenedTitanic, HardenedTitanic, HardenedTitanic, CelestianCrystal, CelestianCrystal, CelestianCrystal, CelestianCrystal",
+		"Module": {
+			"Name": "ModuleRail",
+			"Type": "BFRailSegment",
+			"HeadType": "BF_Rail_0",
+			"AnimWeight": 0.2,
+			"StartAP": {
+				"AnimLength": 4,
+				"AnimPosChange": {"x": 0, "y": 1.5, "z": -1.5},
+				"DisableFreeJoint": true,
+				"Tangent": {"x": 0, "y": 0, "z": -1},
+				"apPos": {"x": 0, "y": -0.5, "z": 1},
+				"blockPos": {"x": 0, "y": -1, "z": 1},
+				"apDirForward": {"x": 0, "y": -1, "z": 0},
+				"apDirUp": {"x": 0, "y": 0, "z": 1}
+			},
+			"EndAP": {
+				"AnimLength": 4,
+				"AnimPosChange": {"x": 0, "y": -1.5, "z": 1.5},
+				"DisableFreeJoint": true,
+				"Tangent": {"x": 0, "y": -1, "z": 0},
+				"apPos": {"x": 0, "y": 1, "z": -0.5},
+				"blockPos": {"x": 0, "y": 1, "z": -1},
+				"apDirForward": {"x": 0, "y": 0, "z": -1},
+				"apDirUp":{"x": 0, "y": 1, "z": 0}
+			}
+		}
+	},
+	{
+		"name": "Better Future Rail corner segment",
+		"ID": 1393803,
+		"Corp": "BF",
+		"Grade": 0,
+		"Price": 2106,
+		"HP": 400,
+		"Fragility": 0.5,
+		"Mass": 1.5,
+		"Unity_ID": "bf_rail_segment_corner",
+		"Recipe": "HardenedTitanic, HardenedTitanic, CelestianCrystal, CelestianCrystal",
+		"Module": {
+			"Name": "ModuleRail",
+			"Type": "BFRailSegment",
+			"HeadType": "BF_Rail_0",
+			"AnimWeight": 0.25,
+			"StartAP": {
+				"AnimLength": 1,
+				"AnimPosChange": {"x": 0.5, "y": 0.5, "z": 0},
+				"DisableFreeJoint": true,
+				"Tangent": {"x": 1, "y": 0, "z": 0},
+				"apPos": {"x": 0, "y": -0.5, "z": 0},
+				"blockPos": {"x": 0, "y": -1, "z": 0},
+				"apDirForward": {"x": 0, "y": -1, "z": 0},
+				"apDirUp": {"x": 0, "y": 0, "z": 1}
+			},
+			"EndAP": {
+				"AnimLength": 1,
+				"AnimPosChange": {"x": -0.5, "y": -0.5, "z": 0},
+				"DisableFreeJoint": true,
+				"Tangent": {"x": 0, "y": -1, "z": 0},
+				"apPos": {"x": 0.5, "y": 0, "z": 0},
+				"blockPos": {"x": 1, "y": 0, "z": 0},
+				"apDirForward": {"x": 1, "y": 0, "z": 0},
+				"apDirUp": {"x": 0, "y": 0, "z": 1}
+			}
+		}
+	},
+	{
+		"name": "Better Future Rail large corner segment",
+		"ID": 1393804,
+		"Corp": "BF",
+		"Grade": 0,
+		"Price": 3879,
+		"HP": 1200,
+		"Fragility": 0.5,
+		"Mass": 4.5,
+		"Unity_ID": "bf_rail_segment_corner_large",
+		"Recipe": "HardenedTitanic, HardenedTitanic, HardenedTitanic, CelestianCrystal, CelestianCrystal, CelestianCrystal, CelestianCrystal",
+		"Module": {
+			"Name": "ModuleRail",
+			"Type": "BFRailSegment",
+			"HeadType": "BF_Rail_0",
+			"AnimWeight": 0.27,
+			"StartAP": {
+				"AnimLength": 3,
+				"AnimPosChange": {"x": 1.5, "y": 1.5, "z": 0},
+				"DisableFreeJoint": true,
+				"Tangent": {"x": 1, "y": 0, "z": 0},
+				"apPos": {"x": 0, "y": -0.5, "z": 0},
+				"blockPos": {"x": 0, "y": -1, "z": 0},
+				"apDirForward": {"x": 0, "y": -1, "z": 0},
+				"apDirUp": {"x": 0, "y": 0, "z": 1}
+			},
+			"EndAP": {
+				"AnimLength": 3,
+				"AnimPosChange": {"x": -1.5, "y": -1.5, "z": 0},
+				"DisableFreeJoint": true,
+				"Tangent": {"x": 0, "y": -1, "z": 0},
+				"apPos": {"x": 1.5, "y": 1, "z": 0},
+				"blockPos": {"x": 2, "y": 1, "z": 0},
+				"apDirForward": {"x": 1, "y": 0, "z": 0},
+				"apDirUp": {"x": 0, "y": 0, "z": 1}
+			}
+		}
+	},
+	{
+		"name": "Hawkeye Armoured Panel Gate",
+		"ID": 6194711,
+		"Corp": "HE",
+		"Grade": 2,
+		"Price": 3513,
+		"HP": 3500,
+		"Mass": 2,
+		"Unity_ID": "he_armoured_gate",
+		"Module": {
+			"Name": "ModulePiston",
+			"Function": "SetHawkeyePanelDecoPiston"
+		},
+		"Recipe": "RubberBrick, SensoryTransmitter, PlubonicGreebles, HardenedTitanic",
+		"NuterraBlock": {
+			"CenterOfMass": { "x": 0, "y": 0, "z": -0.4 },
+			"DamageableType": "Armour",
+			"Icon": "pistonblock he panel deco.png"
+		}
+	},
+	{
+		"name": "GSO Medium Embedded Swivel",
+		"ID": 1393838,
+		"Corp": "GSO",
+		"Grade": 2,
+		"Price": 4470,
+		"HP": 2000,
+		"Mass": 2.5,
+		"Unity_ID": "gso_medium_swivel",
+		"Recipe": "FuelInjector, SensoryTransmitter, PlubonicAlloy",
+		"Module": {
+			"Name": "ModuleSwivel",
+			"Function": "SetMediumSwivel"
+		},
+		"NuterraBlock": {
+			"AutoImported": true
+		}
+	},
+	{
+		"name": "Venture Inline Swivel",
+		"ID": 1393837,
+		"Corp": "VEN",
+		"Grade": 2,
+		"Price": 6237,
+		"HP": 2000,
+		"Mass": 3,
+		"Unity_ID": "ven_inline_swivel",
+		"Recipe": "FuelInjector, FuelInjector, SensoryTransmitter, PlubonicAlloy, PlubonicAlloy",
+		"Module": {
+			"Name": "ModuleSwivel",
+			"Function": "SetInlineSwivel"
+		}
+	},
+	{
+		"name": "GSO Small Embedded Swivel",
+		"ID": 1393836,
+		"Corp": "GSO",
+		"Grade": 2,
+		"Price": 4455,
+		"HP": 2000,
+		"Mass": 1.5,
+		"Unity_ID": "gso_small_swivel",
+		"Recipe": "PlubonicGreebles, PlubonicGreebles, FuelInjector, SensoryTransmitter",
+		"Module": {
+			"Name": "ModuleSwivel",
+			"Function": "SetSmallSwivel"
+		}
+	},
+	{
+		"name": "Hawkeye Dual Rotor Swivel",
+		"ID": 1393835,
+		"Corp": "HE",
+		"Grade": 2,
+		"Price": 5526,
+		"HP": 2000,
+		"Mass": 2,
+		"Unity_ID": "he_swivel",
+		"Recipe": "PlubonicAlloy, PlubonicAlloy, FuelInjector, SensoryTransmitter",
+		"Module": {
+			"Name": "ModuleSwivel",
+			"Function": "SetDoubleSwivel"
+		}
+	},
+	{
+		"name": "R.R. Medium Inline Swivel",
+		"ID": 29571436,
+		"Corp": "EXP",
+		"Grade": 0,
+		"Price": 4470,
+		"HP": 2000,
+		"Mass": 4,
+		"Unity_ID": "rr_inline_swivel",
+		"Recipe": "FuelInjector, SensoryTransmitter, PlubonicAlloy",
+		"Module": {
+			"Name": "ModuleSwivel",
+			"Function": "SetMediumInlineSwivel"
+		},
+		"NuterraBlock": {
+			"AutoImported": true
+		}
+	}
+]

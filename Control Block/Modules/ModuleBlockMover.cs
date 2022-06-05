@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using TechComponentInjector;
 using LogManager;
 using NLog;
 
@@ -13,14 +12,14 @@ namespace Control_Block
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         internal static void ConfigureLogger()
         {
-            Manager.LogConfig config = new Manager.LogConfig
+            LogConfig config = new LogConfig
             {
                 layout = "${longdate} | ${level:uppercase=true:padding=-5:alignmentOnTruncation=left} | ${logger:shortName=true} | ${message}  ${exception}",
                 keepOldFiles = false,
                 defaultMinLevel = ControlBlocksMod.logLevel,
                 path = ControlBlocksMod.ModLogsDir
             };
-            Manager.RegisterLogger(logger, config);
+            TTLogManager.RegisterLogger(logger, config);
         }
 
         internal class ModuleBMPart : Module

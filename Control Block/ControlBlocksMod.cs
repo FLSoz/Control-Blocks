@@ -31,13 +31,13 @@ namespace Control_Block
         internal static LogLevel logLevel = LogLevel.Info;
         internal static void ConfigureLogger()
         {
-            Manager.LogConfig config = new Manager.LogConfig
+            LogConfig config = new LogConfig
             {
                 layout = "${longdate} | ${level:uppercase=true:padding=-5:alignmentOnTruncation=left} | ${logger:shortName=true} | ${message}  ${exception}",
                 keepOldFiles = false,
                 defaultMinLevel = logLevel
             };
-            Manager.RegisterLogger(logger, config);
+            TTLogManager.RegisterLogger(logger, config);
         }
 
         private static void ReadLoggingLevel()
@@ -69,7 +69,7 @@ namespace Control_Block
             ControlBlocksMod.ConfigureLogger();
 
             // JSON Module loader logging
-            Manager.LogTarget target = Manager.RegisterLoggingTarget("ModuleLoaders", new Manager.TargetConfig
+            LogTarget target = TTLogManager.RegisterLoggingTarget("ModuleLoaders", new TargetConfig
             {
                 layout = "${longdate} | ${level:uppercase=true:padding=-5:alignmentOnTruncation=left} | ${logger:shortName=true} | ${message}  ${exception}",
                 path = "Control_Blocks"
@@ -83,7 +83,7 @@ namespace Control_Block
             // Module logging
             ModuleBlockMover.ConfigureLogger();
 
-            Manager.LogTarget railTarget = Manager.RegisterLoggingTarget("Rails", new Manager.TargetConfig
+            LogTarget railTarget = TTLogManager.RegisterLoggingTarget("Rails", new TargetConfig
             {
                 layout = "${longdate} | ${level:uppercase=true:padding=-5:alignmentOnTruncation=left} | ${logger:shortName=true} | ${message}  ${exception}",
                 path = "Control_Blocks"

@@ -1,0 +1,14 @@
+{
+    "ModulePiston": {
+        "Function": "SetVENPiston"
+    },
+    "NuterraBlock": {
+        "AutoImported": true,
+        "Price": 6075,
+        "HP": 1250,
+        "Mass": 1,
+        "ID": 1293837,
+        "Icon": "ven_twist_piston.png"
+    },
+    "Recipe": "plubonicgreebles, plubonicgreebles, blastcaps, fuelinjector, sensorytransmitter, plubonicalloy"
+}

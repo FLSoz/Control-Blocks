@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a54d95abee2c3148b540fda745ffee3, type: 3}
+  m_Name: he_piston
+  m_EditorClassIdentifier: 
+  m_Corporation: HE
+  m_BlockIdentifier: 
+  m_BlockDisplayName: Hawkeye Telescopic Piston
+  m_BlockDescription: 'A set of enforced interlocked plates composing a piston that
+    can extend to 4 blocks from its compressed state.
+
+    Right click to configure this block.
+
+
+    This is a BlockMover. Blocks attached to the head of this will have their own
+    physics separate from the body they are on, yet still restrained to the same tech.
+    Like a multi-tech, but a single tech. ClusterTech.'
+  m_Grade: 3
+  m_Rarity: 2
+  m_Price: 6993
+  m_Category: 1
+  m_UnlockWithLicense: 1
+  m_PhysicalPrefab: {fileID: 3853497953920825618, guid: a918a5347eaa88143ab29265663feff2,
+    type: 3}
+  m_Icon: {fileID: 2800000, guid: e2009f62c44e2cd499050c0d398b6756, type: 3}
+  m_MaxHealth: 2250
+  m_Mass: 5
+  m_Json: {fileID: 4900000, guid: 73786cf7a30f44848bc8d1fc42228c61, type: 3}
+  m_DamageableType: 0
+  m_ModuleData: []

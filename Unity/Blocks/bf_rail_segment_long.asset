@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a54d95abee2c3148b540fda745ffee3, type: 3}
+  m_Name: bf_rail_segment_long
+  m_EditorClassIdentifier: 
+  m_Corporation: BF
+  m_BlockIdentifier: 
+  m_BlockDisplayName: Better Future Rail long segment
+  m_BlockDescription: '(Trevel length: 2) A longer segment for the Better Future Rail
+    Piston, add it to the end of the line to make it go even farther.'
+  m_Grade: 1
+  m_Rarity: 2
+  m_Price: 3879
+  m_Category: 1
+  m_UnlockWithLicense: 1
+  m_PhysicalPrefab: {fileID: 2928487061504610613, guid: fe73e6a1eb17af943902855d582b888a,
+    type: 3}
+  m_Icon: {fileID: 2800000, guid: 75a67cfb26ecd43479020370cef82d1f, type: 3}
+  m_MaxHealth: 800
+  m_Mass: 3
+  m_Json: {fileID: 4900000, guid: 031a7c21ab758d348b278a2758a09571, type: 3}
+  m_DamageableType: 0
+  m_ModuleData: []

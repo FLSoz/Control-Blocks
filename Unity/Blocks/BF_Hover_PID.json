@@ -1,0 +1,22 @@
+{
+	"ModulePID": {
+		"HoldPosition": true,
+		"ManualTargetChangeRage": 1.0,
+		"UseTargetHeight": true,
+		"Hover": {
+			"kP": 300,
+			"kI": 10,
+			"kD": 600,
+			"debug": false
+		}
+	},
+	"Recipe": "motherbrain, thermojet, fibreplating, fibreplating",
+	"NuterraBlock": {
+		"ID": "10998",
+		"Deserializer": {
+			"GameObject|_spindle": {
+				"Reference|BF_Stabiliser_Computer_111/_spindle/Spinner.": {}
+			}
+		}
+	}
+}

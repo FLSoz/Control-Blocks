@@ -1,0 +1,11 @@
+{
+	"Recipe": "rubberbrick, rubberbrick, rubberbrick, rubberbrick",
+	"ModuleMTMagnet": {
+		"Identity": "Fixed",
+		"TransformCorrection": 0.5,
+		"VelocityCorrection": 0.5
+	},
+	"NuterraBlock": {
+		"ID": "1293700"
+	}
+}

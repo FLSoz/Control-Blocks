@@ -1,0 +1,81 @@
+{
+    "ModuleRail": {
+        "Type": "BFRailSegment",
+        "HeadType": "BF_Rail_0",
+        "StartAP": {
+            "AnimLength": 2,
+            "AnimPosChange": {
+                "x": 0,
+                "y": 2,
+                "z": 0
+            },
+            "Tangent": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "apPos": {
+                "x": 0,
+                "y": -0.5,
+                "z": 0
+            },
+            "blockPos": {
+                "x": 0,
+                "y": -1,
+                "z": 0
+            },
+            "apDirForward": {
+                "x": 0,
+                "y": -1,
+                "z": 0
+            },
+            "apDirUp": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            }
+        },
+        "EndAP": {
+            "AnimLength": 2,
+            "AnimPosChange": {
+                "x": 0,
+                "y": -2,
+                "z": 0
+            },
+            "Tangent": {
+                "x": 0,
+                "y": -1,
+                "z": 0
+            },
+            "apPos": {
+                "x": 0,
+                "y": 1.5,
+                "z": 0
+            },
+            "blockPos": {
+                "x": 0,
+                "y": 2,
+                "z": 0
+            },
+            "apDirForward": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            },
+            "apDirUp": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            }
+        }
+    },
+    "NuterraBlock": {
+        "AutoImported": true,
+        "Price": 3879,
+        "HP": 800,
+        "Mass": 3,
+        "ID": 1393800,
+        "Fragility": 0.5
+    },
+    "Recipe": "hardenedtitanic, hardenedtitanic, hardenedtitanic, celestiancrystal, celestiancrystal, celestiancrystal, celestiancrystal"
+}

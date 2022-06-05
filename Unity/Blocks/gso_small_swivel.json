@@ -1,0 +1,13 @@
+{
+    "ModuleSwivel": {
+        "Function": "SetSmallSwivel"
+    },
+    "NuterraBlock": {
+        "AutoImported": true,
+        "Price": 4455,
+        "HP": 2000,
+        "Mass": 1.5,
+        "ID": 1393836
+    },
+    "Recipe": "plubonicgreebles, plubonicgreebles, fuelinjector, sensorytransmitter"
+}

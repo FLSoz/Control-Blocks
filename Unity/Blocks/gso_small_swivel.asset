@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a54d95abee2c3148b540fda745ffee3, type: 3}
+  m_Name: gso_small_swivel
+  m_EditorClassIdentifier: 
+  m_Corporation: GSO
+  m_BlockIdentifier: 
+  m_BlockDisplayName: GSO Small Embedded Swivel
+  m_BlockDescription: 'It''s like the medium embedded swivel, but smaller. Look at
+    how small it is, it''s like a macaroon cheeseburger cupcake! Good thing it isn''t,
+    or there''d be food all over.
+
+    Right click to configure this block.
+
+
+    This is a BlockMover. Blocks attached to the head of this will have their own
+    physics separate from the body they are on, yet still restrained to the same tech.
+    Like a multi-tech, but a single tech. ClusterTech.'
+  m_Grade: 1
+  m_Rarity: 2
+  m_Price: 4455
+  m_Category: 1
+  m_UnlockWithLicense: 1
+  m_PhysicalPrefab: {fileID: 5195285514580638206, guid: 46896f0837807d8429d2dec71b03d8af,
+    type: 3}
+  m_Icon: {fileID: 2800000, guid: 01b987e47ba7c274aaa2ec7af8027505, type: 3}
+  m_MaxHealth: 2000
+  m_Mass: 1.5
+  m_Json: {fileID: 4900000, guid: 46e456ca0ccee1c44994a4350ba6f9e4, type: 3}
+  m_DamageableType: 0
+  m_ModuleData: []

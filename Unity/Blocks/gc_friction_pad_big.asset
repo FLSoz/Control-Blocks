@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a54d95abee2c3148b540fda745ffee3, type: 3}
+  m_Name: gc_friction_pad_big
+  m_EditorClassIdentifier: 
+  m_Corporation: GC
+  m_BlockIdentifier: 
+  m_BlockDisplayName: Non Slip-A-Tron 3000
+  m_BlockDescription: 'Name by /-Shido, Shido named this block. Who, what?
+
+    <i>What where am I-I need an adult</i>'
+  m_Grade: 2
+  m_Rarity: 2
+  m_Price: 2000
+  m_Category: 3
+  m_UnlockWithLicense: 1
+  m_PhysicalPrefab: {fileID: 7434438857172221777, guid: ed509576f95bba64b93be85385672306,
+    type: 3}
+  m_Icon: {fileID: 2800000, guid: a575d7fefc61d2b40abe45a743bec080, type: 3}
+  m_MaxHealth: 2500
+  m_Mass: 2
+  m_Json: {fileID: 4900000, guid: c1200b88252899546b18741807c169d4, type: 3}
+  m_DamageableType: 0
+  m_ModuleData: []

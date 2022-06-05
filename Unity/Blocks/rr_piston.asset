@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a54d95abee2c3148b540fda745ffee3, type: 3}
+  m_Name: rr_piston
+  m_EditorClassIdentifier: 
+  m_Corporation: EXP
+  m_BlockIdentifier: 
+  m_BlockDisplayName: R.R. Floating Piston
+  m_BlockDescription: "The Floating Piston is an experimental block-mover developed
+    at A.C.E. laboratories, in an effort to make a floating table which dogs wouldn\u2019t
+    bump into while playing around the lab (the facility is famous for the large cloned
+    dog population).\nIt uses the new R- AF ionic engine to move a tiny platform up
+    and down. One can even pass their hand between both blocks, as the ionic beam
+    is completely harmless on short term.\n\n\nRight click to configure this block.\n\nThis
+    is a BlockMover. Blocks attached to the head of this will have their own physics
+    separate from the body they are on, yet still restrained to the same tech. Like
+    a multi-tech, but a single tech. ClusterTech.\n\n<b>Aceba1</b>: And so King Rafs
+    pronounced, 'Let it do be so', with two pitchforks in each hand; And piercing
+    the sky at all 4 corners, raised the man hole cover from the grasp of the pothole
+    pathways for the first time since two days ago. Then, proceeded to fire at it
+    with grace and pitchforks to propel it to the heavens, gifting it with the imprinted
+    psychological trauma of flight.\n<b>Rafs</b>: What the-"
+  m_Grade: 1
+  m_Rarity: 2
+  m_Price: 10000
+  m_Category: 1
+  m_UnlockWithLicense: 1
+  m_PhysicalPrefab: {fileID: 7174381040169306843, guid: 6bfd23d396c9fe94cb5ca48b18ae9b8b,
+    type: 3}
+  m_Icon: {fileID: 2800000, guid: 6e656151346f7f9488a4f25731fd1eb7, type: 3}
+  m_MaxHealth: 600
+  m_Mass: 4
+  m_Json: {fileID: 4900000, guid: 24f41a92e01b4dd479fbb5afca2cf6c0, type: 3}
+  m_DamageableType: 0
+  m_ModuleData: []

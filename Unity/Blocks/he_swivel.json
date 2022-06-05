@@ -1,0 +1,13 @@
+{
+    "ModuleSwivel": {
+        "Function": "SetDoubleSwivel"
+    },
+    "NuterraBlock": {
+        "AutoImported": true,
+        "Price": 5526,
+        "HP": 2000,
+        "Mass": 2,
+        "ID": 1393835
+    },
+    "Recipe": "plubonicalloy, plubonicalloy, fuelinjector, sensorytransmitter"
+}

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a54d95abee2c3148b540fda745ffee3, type: 3}
+  m_Name: bf_rail_piston
+  m_EditorClassIdentifier: 
+  m_Corporation: BF
+  m_BlockIdentifier: 
+  m_BlockDisplayName: Better Future Rail Piston
+  m_BlockDescription: 'An extendable rail, with a small cart that can move blocks
+    attached to it. Add rail segment blocks to the end to make it longer!
+
+    Right click to configure this block.
+
+
+    This is a BlockMover. Blocks attached to the head of this will have their own
+    physics separate from the body they are on, yet still restrained to the same tech.
+    Like a multi-tech, but a single tech. ClusterTech.'
+  m_Grade: 1
+  m_Rarity: 2
+  m_Price: 6984
+  m_Category: 1
+  m_UnlockWithLicense: 1
+  m_PhysicalPrefab: {fileID: 1665335724405879077, guid: bd2a7324c534371439fb7d01a5d6fc5b,
+    type: 3}
+  m_Icon: {fileID: 2800000, guid: 53334e27acef46c49b92ce85be63c869, type: 3}
+  m_MaxHealth: 600
+  m_Mass: 1.5
+  m_Json: {fileID: 4900000, guid: e099a157f3b211244ad5beb1b195a8c2, type: 3}
+  m_DamageableType: 0
+  m_ModuleData: []

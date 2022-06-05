@@ -1,0 +1,84 @@
+{
+    "ModuleRail": {
+        "Type": "BFRailSegment",
+        "HeadType": "BF_Rail_0",
+        "AnimWeight": 0.2,
+        "StartAP": {
+            "AnimLength": 4,
+            "AnimPosChange": {
+                "x": 0,
+                "y": 1.5,
+                "z": -1.5
+            },
+            "DisableFreeJoint": true,
+            "Tangent": {
+                "x": 0,
+                "y": 0,
+                "z": -1
+            },
+            "apPos": {
+                "x": 0,
+                "y": -0.5,
+                "z": 1
+            },
+            "blockPos": {
+                "x": 0,
+                "y": -1,
+                "z": 1
+            },
+            "apDirForward": {
+                "x": 0,
+                "y": -1,
+                "z": 0
+            },
+            "apDirUp": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            }
+        },
+        "EndAP": {
+            "AnimLength": 4,
+            "AnimPosChange": {
+                "x": 0,
+                "y": -1.5,
+                "z": 1.5
+            },
+            "DisableFreeJoint": true,
+            "Tangent": {
+                "x": 0,
+                "y": -1,
+                "z": 0
+            },
+            "apPos": {
+                "x": 0,
+                "y": 1,
+                "z": -0.5
+            },
+            "blockPos": {
+                "x": 0,
+                "y": 1,
+                "z": -1
+            },
+            "apDirForward": {
+                "x": 0,
+                "y": 0,
+                "z": -1
+            },
+            "apDirUp": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+            }
+        }
+    },
+    "NuterraBlock": {
+        "AutoImported": true,
+        "Price": 4212,
+        "HP": 1200,
+        "Mass": 4.5,
+        "ID": 1393802,
+        "Fragility": 0.5
+    },
+    "Recipe": "hardenedtitanic, hardenedtitanic, hardenedtitanic, hardenedtitanic, celestiancrystal, celestiancrystal, celestiancrystal, celestiancrystal"
+}

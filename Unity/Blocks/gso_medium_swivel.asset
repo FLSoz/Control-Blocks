@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a54d95abee2c3148b540fda745ffee3, type: 3}
+  m_Name: gso_medium_swivel
+  m_EditorClassIdentifier: 
+  m_Corporation: GSO
+  m_BlockIdentifier: 
+  m_BlockDisplayName: GSO Medium Embedded Swivel
+  m_BlockDescription: 'A cheap & light configurable swivel that can rotate blocks
+    on a tech. It''s like the small embedded swivel, but medium. The head for this
+    one rests on the top, safely inside the base.
+
+    Right click to configure this block.
+
+
+    This is a BlockMover. Blocks attached to the head of this will have their own
+    physics separate from the body they are on, yet still restrained to the same tech.
+    Like a multi-tech, but a single tech. ClusterTech.'
+  m_Grade: 1
+  m_Rarity: 2
+  m_Price: 4470
+  m_Category: 1
+  m_UnlockWithLicense: 1
+  m_PhysicalPrefab: {fileID: 8405762030779205105, guid: b8505fd47b714ff43987cfb17daf441c,
+    type: 3}
+  m_Icon: {fileID: 2800000, guid: ce93b0f010d2bd746aa588390afa129d, type: 3}
+  m_MaxHealth: 2000
+  m_Mass: 2.5
+  m_Json: {fileID: 4900000, guid: 728e8070609662e4f96883b77c9a0250, type: 3}
+  m_DamageableType: 0
+  m_ModuleData: []

@@ -1,0 +1,20 @@
+{
+    "ModulePiston": {
+        "Function": "SetHawkeyePanelPiston"
+    },
+    "NuterraBlock": {
+        "AutoImported": true,
+        "Price": 5283,
+        "HP": 2250,
+        "Mass": 2,
+        "ID": 6194710,
+        "CenterOfMass": {
+            "x": 0,
+            "y": 0.5,
+            "z": -0.4
+        },
+        "DamageableType": "Armour",
+        "Icon": "pistonblock he panel"
+    },
+    "Recipe": "fuelinjector, sensorytransmitter, plubonicalloy, titanicalloy"
+}

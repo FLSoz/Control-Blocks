@@ -1,0 +1,15 @@
+{
+    "ModuleRail": {
+        "Type": "BFRailPiston",
+        "HeadType": "BF_Rail_0"
+    },
+    "NuterraBlock": {
+        "AutoImported": true,
+        "Price": 6984,
+        "HP": 600,
+        "Mass": 1.5,
+        "ID": 1293835,
+        "Fragility": 0.5
+    },
+    "Recipe": "hardenedtitanic, fuelinjector, hardlightdrive, sensorytransmitter"
+}

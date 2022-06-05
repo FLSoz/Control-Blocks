@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a54d95abee2c3148b540fda745ffee3, type: 3}
+  m_Name: he_armoured_gate
+  m_EditorClassIdentifier: 
+  m_Corporation: HE
+  m_BlockIdentifier: 
+  m_BlockDisplayName: Hawkeye Armoured Panel Gate
+  m_BlockDescription: 'A conveniently compactable set of extendable panels for armoring
+    whatever you want to hide behind a series of whatever conditions are most convenient.
+    There''s not much else to it
+
+    Right click to configure this block.
+
+
+    This is a decorative BlockMover. It does not separate physics bodies or move blocks
+    at all, but it still posesses the programmability of a standard BlockMover.'
+  m_Grade: 3
+  m_Rarity: 2
+  m_Price: 3513
+  m_Category: 5
+  m_UnlockWithLicense: 1
+  m_PhysicalPrefab: {fileID: 9086823913156215161, guid: bb3a413a4fd7a4147a6b26601904da06,
+    type: 3}
+  m_Icon: {fileID: 2800000, guid: 73926f908af7a81468ec4b0a21e63466, type: 3}
+  m_MaxHealth: 3500
+  m_Mass: 2
+  m_Json: {fileID: 4900000, guid: 5ab62ea9737877840bcaebe0bf1ab4fa, type: 3}
+  m_DamageableType: 0
+  m_ModuleData: []

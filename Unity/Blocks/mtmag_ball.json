@@ -1,0 +1,11 @@
+{
+	"Recipe": "plubonicgreebles, plubonicgreebles, plubonicgreebles",
+	"ModuleMTMagnet": {
+		"Identity": "Ball",
+		"TransformCorrection": 0.3,
+		"VelocityCorrection": 0.6
+	},
+	"NuterraBlock": {
+		"ID": "1293701"
+	}
+}

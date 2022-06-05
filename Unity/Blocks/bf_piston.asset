@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a54d95abee2c3148b540fda745ffee3, type: 3}
+  m_Name: bf_piston
+  m_EditorClassIdentifier: 
+  m_Corporation: BF
+  m_BlockIdentifier: 
+  m_BlockDisplayName: Better Piston
+  m_BlockDescription: 'This piston started the revolution for all pistons and swivels.
+    Replacing the technology of ghost-phasing and uniting swivels and pistons as one
+    in a series of events that this piston was not aware was happening.
+
+    Right click to configure this block.
+
+
+    This is a BlockMover. Blocks attached to the head of this will have their own
+    physics separate from the body they are on, yet still restrained to the same tech.
+    Like a multi-tech, but a single tech. ClusterTech.'
+  m_Grade: 2
+  m_Rarity: 2
+  m_Price: 7587
+  m_Category: 1
+  m_UnlockWithLicense: 1
+  m_PhysicalPrefab: {fileID: 3452943999832728235, guid: d9faebde33623854f8a86036fcff95ae,
+    type: 3}
+  m_Icon: {fileID: 2800000, guid: 4b81cf29ede521f4c8dedd73512ddbdd, type: 3}
+  m_MaxHealth: 2000
+  m_Mass: 3
+  m_Json: {fileID: 4900000, guid: 88f9c32948e87174e9ff381ccbe89850, type: 3}
+  m_DamageableType: 0
+  m_ModuleData: []

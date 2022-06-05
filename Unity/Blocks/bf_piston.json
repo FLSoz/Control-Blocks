@@ -1,0 +1,14 @@
+{
+    "ModulePiston": {
+        "Function": "SetBFPiston"
+    },
+    "NuterraBlock": {
+        "AutoImported": true,
+        "Price": 7587,
+        "HP": 2000,
+        "Mass": 3,
+        "ID": 1293834,
+        "Icon": "BFp.png"
+    },
+    "Recipe": "hardenedtitanic, fuelinjector, heatcoil, sensorytransmitter, plubonicalloy"
+}
