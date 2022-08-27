@@ -8,8 +8,6 @@ using System.Runtime.CompilerServices;
 using HarmonyLib;
 using UnityEngine;
 using Rewired;
-using LogManager;
-using NLog;
 
 namespace Control_Block
 {
@@ -295,7 +293,7 @@ namespace Control_Block
         #region PatchIndependentForces
         // Patch Gyros
         [HarmonyPatch(typeof(ModuleGyro))]
-        [HarmonyPatch("FixedUpdate")]
+        [HarmonyPatch("OnFixedUpdate")]
         public class PatchModuleGyro
         {
             private static FieldInfo m_UseActive = typeof(ModuleGyro).GetField("m_UseActive", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -397,7 +395,7 @@ namespace Control_Block
 
         // Patch ManGravity Thrust
         [HarmonyPatch(typeof(ManGravity))]
-        [HarmonyPatch("FixedUpdate")]
+        [HarmonyPatch("OnFixedUpdate")]
         public class PatchManGravity
         {
             private static FieldInfo m_ApplicationTargets = typeof(ManGravity).GetField("m_ApplicationTargets", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -448,7 +446,7 @@ namespace Control_Block
 
         // Patch ModuleWing thrust
         [HarmonyPatch(typeof(ModuleWing))]
-        [HarmonyPatch("FixedUpdate")]
+        [HarmonyPatch("OnFixedUpdate")]
         public class PatchModuleWing
         {
             public static bool Prefix(ref ModuleWing __instance)
@@ -459,7 +457,7 @@ namespace Control_Block
 
         // Patch ModuleAirBrake thrust
         [HarmonyPatch(typeof(ModuleAirBrake))]
-        [HarmonyPatch("FixedUpdate")]
+        [HarmonyPatch("OnFixedUpdate")]
         public class PatchModuleAirBrake
         {
             private static FieldInfo m_Effector = typeof(ModuleAirBrake).GetField("m_Effector", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -504,7 +502,7 @@ namespace Control_Block
 
         // Patch Hover thrust
         [HarmonyPatch(typeof(HoverJet))]
-        [HarmonyPatch("FixedUpdate")]
+        [HarmonyPatch("OnFixedUpdate")]
         public class PatchHoverJet
         {
             private static FieldInfo grounded = typeof(HoverJet).GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).FirstOrDefault(field =>
@@ -1136,7 +1134,7 @@ namespace Control_Block
 
             // Patch BoosterJet to use throttle
             [HarmonyPatch(typeof(BoosterJet))]
-            [HarmonyPatch("FixedUpdate")]
+            [HarmonyPatch("OnFixedUpdate")]
             public class PatchBoosterJet
             {
                 public static bool Prefix(ref BoosterJet __instance)
@@ -1196,7 +1194,7 @@ namespace Control_Block
 
             // Patch FanJet to use throttle
             [HarmonyPatch(typeof(FanJet))]
-            [HarmonyPatch("FixedUpdate")]
+            [HarmonyPatch("OnFixedUpdate")]
             public class PatchFanJet
             {
                 public static bool Prefix(ref FanJet __instance)

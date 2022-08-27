@@ -6,22 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using UnityEngine;
-using LogManager;
-using NLog;
+using Control_Block;
 
 namespace Control_Block.ModuleLoaders
 {
     public class JSONModuleBlockMoverSwivel : JSONModuleLoader
     {
-        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        internal static void ConfigureLogger(LogTarget target)
+        private static Logger logger;
+        internal static void ConfigureLogger(Logger.TargetConfig target)
         {
-            TTLogManager.RegisterLogger(logger, target);
+            logger = new Logger("Swivel", target);
         }
 
         public override bool CreateModuleForBlock(int blockID, ModdedBlockDefinition def, TankBlock block, JToken data)
         {
-            logger.Trace(data);
+            logger.Trace(data.ToString());
             if (data.Type == JTokenType.Object)
             {
                 JObject obj = (JObject)data;

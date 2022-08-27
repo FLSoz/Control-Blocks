@@ -7,9 +7,6 @@ using HarmonyLib;
 using UnityEngine;
 using System.IO;
 using Control_Block.ModuleLoaders;
-using NLog;
-using NLog.Targets;
-using LogManager;
 
 namespace Control_Block
 {
@@ -27,53 +24,18 @@ namespace Control_Block
         // internal static readonly string TTSteamDir = @"E:/Steam/steamapps/common/TerraTech";
         internal static readonly string ModLogsDir = Path.Combine(TTSteamDir, "Logs/Control_Blocks");
 
-        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        internal static LogLevel logLevel = LogLevel.Info;
+        internal static Logger logger;
         internal static void ConfigureLogger()
         {
-            LogConfig config = new LogConfig
-            {
-                layout = "${longdate} | ${level:uppercase=true:padding=-5:alignmentOnTruncation=left} | ${logger:shortName=true} | ${message}  ${exception}",
-                keepOldFiles = false,
-                defaultMinLevel = logLevel
-            };
-            TTLogManager.RegisterLogger(logger, config);
-        }
-
-        private static void ReadLoggingLevel()
-        {
-            string logLevelStr = null;
-            string generalLevel = CommandLineReader.GetArgument("+log_level");
-            if (generalLevel != null)
-            {
-                logLevelStr = generalLevel;
-            }
-            string modLevel = CommandLineReader.GetArgument("+control_blocks_log_level");
-            if (modLevel != null)
-            {
-                logLevelStr = modLevel;
-            }
-
-            if (logLevelStr != null)
-            {
-                logLevel = LogLevel.FromString(logLevelStr);
-            }
-            Console.WriteLine($"[ControlBlocks] Logging at level {logLevel}");
-        }
-
-        public void ManagedEarlyInit()
-        {
-            ReadLoggingLevel();
-
-            // Main mod logging
-            ControlBlocksMod.ConfigureLogger();
+            logger = new Logger("ControlBlocks");
+            logger.Info("Logger setup");
 
             // JSON Module loader logging
-            LogTarget target = TTLogManager.RegisterLoggingTarget("ModuleLoaders", new TargetConfig
+            Logger.TargetConfig target = new Logger.TargetConfig
             {
-                layout = "${longdate} | ${level:uppercase=true:padding=-5:alignmentOnTruncation=left} | ${logger:shortName=true} | ${message}  ${exception}",
-                path = "Control_Blocks"
-            });
+                path = "Control_Blocks",
+                filename = "JSONLoaders"
+            };
             JSONModuleBlockMoverPiston.ConfigureLogger(target);
             JSONModuleBlockMoverRail.ConfigureLogger(target);
             JSONModuleBlockMoverSwivel.ConfigureLogger(target);
@@ -83,15 +45,21 @@ namespace Control_Block
             // Module logging
             ModuleBlockMover.ConfigureLogger();
 
-            LogTarget railTarget = TTLogManager.RegisterLoggingTarget("Rails", new TargetConfig
+            Logger.TargetConfig railTarget = new Logger.TargetConfig
             {
-                layout = "${longdate} | ${level:uppercase=true:padding=-5:alignmentOnTruncation=left} | ${logger:shortName=true} | ${message}  ${exception}",
-                path = "Control_Blocks"
-            });
+                path = "Control_Blocks",
+                filename = "Rails"
+            };
             ModuleBMRail.ConfigureLogger(railTarget);
             ModuleBMSegment.ConfigureLogger(railTarget);
 
             // UI logging
+        }
+
+        public void ManagedEarlyInit()
+        {
+            // Main mod logging
+            ControlBlocksMod.ConfigureLogger();
 
             GameObject _holder = new GameObject();
             //_holder.AddComponent<OptionMenuPiston>();
@@ -131,11 +99,11 @@ namespace Control_Block
             {
                 if (AppDomain.CurrentDomain.GetAssemblies().Select(assembly => assembly.FullName).Where(name => name.Contains("ModManager")).Count() > 0)
                 {
-                    logger.Warn("EARLY INIT was CALLED for {Class}, but 0ModManager is present!", this.GetType().Name);
+                    logger.Warn($"EARLY INIT was CALLED for {this.GetType().Name}, but 0ModManager is present!");
                 }
                 else
                 {
-                    logger.Warn("EARLY INIT was CALLED for {Class}, but 0ModManager is MISSING!", this.GetType().Name);
+                    logger.Warn($"EARLY INIT was CALLED for {this.GetType().Name}, but 0ModManager is MISSING!");
                     this.ManagedEarlyInit();
                 }
             }
@@ -164,7 +132,7 @@ namespace Control_Block
             if (assembliesSearch.Count() > 0)
             {
                 floaterType = assembliesSearch.First().GetType("MotionBlocks.ModuleFloater");
-                floaterFixedUpdate = floaterType.GetMethod("FixedUpdate", BindingFlags.Instance| BindingFlags.Public | BindingFlags.NonPublic);
+                floaterFixedUpdate = floaterType.GetMethod("OnFixedUpdate", BindingFlags.Instance| BindingFlags.Public | BindingFlags.NonPublic);
 
                 MaxStrength = floaterType.GetField("MaxStrength", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                 MaxHeight = floaterType.GetField("MaxHeight", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);

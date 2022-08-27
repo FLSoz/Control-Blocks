@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using LogManager;
-using NLog;
+using Control_Block;
 
 namespace Control_Block
 {
     public class ModuleBMRail : ModuleBlockMover
     {
-        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        internal static void ConfigureLogger(LogTarget target)
+        private static Logger logger;
+        internal static void ConfigureLogger(Logger.TargetConfig target)
         {
-            TTLogManager.RegisterLogger(logger, target);
+            logger = new Logger("BMRail", target);
         }
 
         public void PrePool()
@@ -47,7 +46,7 @@ namespace Control_Block
             TankBlock Segment = LastAP.GetBlockAtPos(LastBlock, blockMan);
             while (Segment != null)
             {
-                logger.Info(">> Found block {} at {}", Segment.name, Segment.cachedLocalPosition);
+                logger.Info($">> Found block {Segment.name} at {Segment.cachedLocalPosition}");
                 ModuleBMSegment component = Segment.GetComponent<ModuleBMSegment>();
                 if (component == null) // Not a rail segment
                 {
@@ -134,7 +133,7 @@ namespace Control_Block
             Transform prefab = base.transform.GetOriginalPrefab<Transform>();
             if (prefab != null)
             {
-                logger.Debug("Fetched original prefab: {}", prefab.name);
+                logger.Debug($"Fetched original prefab: {prefab.name}");
             }
             else
             {
@@ -184,10 +183,10 @@ namespace Control_Block
 
     public class ModuleBMSegment : Module
     {
-        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        internal static void ConfigureLogger(LogTarget target)
+        private static Logger logger;
+        internal static void ConfigureLogger(Logger.TargetConfig target)
         {
-            TTLogManager.RegisterLogger(logger, target);
+            logger = new Logger("BMSegment", target);
         }
 
         /// <summary>
@@ -280,7 +279,7 @@ namespace Control_Block
             Transform prefab = base.transform.GetOriginalPrefab<Transform>();
             if (prefab != null)
             {
-                logger.Debug("Fetched original prefab: {}", prefab.name);
+                logger.Debug($"Fetched original prefab: {prefab.name}");
             }
             else
             {

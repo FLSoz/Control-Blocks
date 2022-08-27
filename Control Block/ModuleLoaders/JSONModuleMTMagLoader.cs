@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Control_Block.Utils;
 using UnityEngine;
-using LogManager;
-using NLog;
+using Control_Block;
 
 namespace Control_Block.ModuleLoaders
 {
     public class JSONModuleMTMagLoader : JSONModuleLoader
 	{
-		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-		internal static void ConfigureLogger(LogTarget target)
+		private static Logger logger;
+		internal static void ConfigureLogger(Logger.TargetConfig target)
 		{
-			TTLogManager.RegisterLogger(logger, target);
+			logger = new Logger("MTMag", target);
 		}
 
 		public override string GetModuleKey()
@@ -26,7 +25,7 @@ namespace Control_Block.ModuleLoaders
 
 		public override bool CreateModuleForBlock(int blockID, ModdedBlockDefinition def, TankBlock block, JToken jToken)
 		{
-			logger.Trace(jToken);
+			logger.Trace(jToken.ToString());
 			if (jToken.Type == JTokenType.Object)
 			{
 				JObject obj = (JObject)jToken;

@@ -5,22 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using LogManager;
-using NLog;
+using Control_Block;
 
 namespace Control_Block.ModuleLoaders
 {
     public class JSONModuleBlockMoverRail : JSONModuleLoader
     {
-        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        internal static void ConfigureLogger(LogTarget target)
+        private static Logger logger;
+        internal static void ConfigureLogger(Logger.TargetConfig target)
         {
-            TTLogManager.RegisterLogger(logger, target);
+            logger = new Logger("Rail", target);
         }
 
         public override bool CreateModuleForBlock(int blockID, ModdedBlockDefinition def, TankBlock block, JToken data)
         {
-            logger.Trace(data);
+            logger.Trace(data.ToString());
             if (data.Type == JTokenType.Object)
             {
                 JObject obj = (JObject)data;
@@ -105,7 +104,7 @@ namespace Control_Block.ModuleLoaders
 
             if (data.TryGetValue("StartAP", out JToken startAP) && startAP.Type == JTokenType.Object)
             {
-                logger.Trace("Setting Start AP:\n{}", startAP);
+                logger.Trace($"Setting Start AP:\n{startAP}");
                 JObject jObject = startAP as JObject;
                 rail.startAP = new AttachPoint()
                 {
@@ -122,7 +121,7 @@ namespace Control_Block.ModuleLoaders
 
             if (data.TryGetValue("EndAP", out JToken endAP) && endAP.Type == JTokenType.Object)
             {
-                logger.Trace("Setting End AP:\n{}", endAP);
+                logger.Trace($"Setting End AP:\n{endAP}");
                 JObject jObject = endAP as JObject;
                 rail.endAP = new AttachPoint()
                 {

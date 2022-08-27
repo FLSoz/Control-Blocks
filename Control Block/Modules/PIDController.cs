@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.Reflection;
-using LogManager;
-using NLog;
 
 // compile with: -doc:DocFileName.xml
 
@@ -885,7 +883,7 @@ namespace Control_Block
                 Vector3 standardForce = -this.nonGravityThrust;
                 Vector3 standardTorque = -this.nonManagedTorque;
                 Vector3 relativeTargetPosition = this.AttachedTank.transform.InverseTransformVector(this.targetPosition - this.AttachedTank.WorldCenterOfMass);
-                // PIDController.GlobalDebugPrint($"FixedUpdate Commanded Action: {inputCommand}, CalculatedThrustPos: {this.calculatedThrustNegative}, CalculatedThrustNeg: {this.calculatedThrustPositive}");
+                // PIDController.GlobalDebugPrint($"OnFixedUpdate Commanded Action: {inputCommand}, CalculatedThrustPos: {this.calculatedThrustNegative}, CalculatedThrustNeg: {this.calculatedThrustPositive}");
 
                 if (this.StrafePID != null && this.StrafePID.enabled)
                 {

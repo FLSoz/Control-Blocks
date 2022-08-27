@@ -2,24 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using LogManager;
-using NLog;
+using Control_Block;
 
 namespace Control_Block
 {
     public class ModuleBlockMover : Module, TechAudio.IModuleAudioProvider
     {
-        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        private static Logger logger;
         internal static void ConfigureLogger()
         {
-            LogConfig config = new LogConfig
-            {
-                layout = "${longdate} | ${level:uppercase=true:padding=-5:alignmentOnTruncation=left} | ${logger:shortName=true} | ${message}  ${exception}",
-                keepOldFiles = false,
-                defaultMinLevel = ControlBlocksMod.logLevel,
-                path = ControlBlocksMod.ModLogsDir
-            };
-            TTLogManager.RegisterLogger(logger, config);
+            logger = new Logger("ModuleBlockMover");
         }
 
         internal class ModuleBMPart : Module
@@ -700,7 +692,7 @@ namespace Control_Block
                 {
                     string name = descriptor.Name;
                     object value = descriptor.GetValue(this);
-                    logger.Debug("{0}={1}", name, value);
+                    logger.Debug($"{name}={value}");
                 }
             }
             oldMoverType = moverType;

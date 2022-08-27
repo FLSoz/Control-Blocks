@@ -5,8 +5,6 @@ using System.Text;
 using HarmonyLib;
 using UnityEngine;
 using System.Reflection;
-using LogManager;
-using NLog;
 
 namespace Control_Block
 {
