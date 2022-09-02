@@ -319,7 +319,7 @@ namespace Control_Block
             {
                 if (__instance.block.tank)
                 {
-                    PIDController pidController = __instance.block.tank.gameObject.GetComponent<PIDController>();
+                    PIDController pidController = __instance.block.tank?.gameObject.GetComponent<PIDController>();
                     if (pidController != null && !pidController.AttachedTank.beam.IsActive)
                     {
                         Rigidbody rbody = __instance.block.tank.rbody;
@@ -395,7 +395,7 @@ namespace Control_Block
 
         // Patch ManGravity Thrust
         [HarmonyPatch(typeof(ManGravity))]
-        [HarmonyPatch("OnFixedUpdate")]
+        [HarmonyPatch("FixedUpdate")]
         public class PatchManGravity
         {
             private static FieldInfo m_ApplicationTargets = typeof(ManGravity).GetField("m_ApplicationTargets", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -512,7 +512,7 @@ namespace Control_Block
                         field.Name.StartsWith("<" + typeof(HoverJet).GetProperty("grounded").Name + ">")
                     );
             private static FieldInfo m_Hover = typeof(HoverJet).GetField("m_Hover", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            private static FieldInfo parentBlock = typeof(HoverJet).GetField("parentBlock", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            private static FieldInfo parentBlock = typeof(HoverJet).GetField("m_ParentBlock", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             private static FieldInfo m_EffectorDir = typeof(HoverJet).GetField("m_EffectorDir", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             private static FieldInfo m_CosGroundMaxSlopeAngle = typeof(HoverJet).GetField("m_CosGroundMaxSlopeAngle", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             private static FieldInfo m_MaxClimbDistance = typeof(HoverJet).GetField("m_MaxClimbDistance", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -528,7 +528,7 @@ namespace Control_Block
             private static FieldInfo k_LayerIgnoreMask = typeof(HoverJet).GetField("k_LayerIgnoreMask", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
             private static FieldInfo s_Hits = typeof(HoverJet).GetField("s_Hits", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
 
-            public static bool Prefix(ref HoverJet __instance)
+            public static bool Prefix(HoverJet __instance)
             {
                 PatchHoverJet.grounded.SetValue(__instance, false);
                 float _Hover = (float)PatchHoverJet.m_Hover.GetValue(__instance);
@@ -1141,7 +1141,7 @@ namespace Control_Block
                 {
                     TankBlock parentBlock = (TankBlock)PatchBooster.m_ParentBlock.GetValue(__instance);
                     if (parentBlock != null) {
-                    Tank parentTank = parentBlock.tank;
+                        Tank parentTank = parentBlock.tank;
                         if (parentTank != null)
                         {
                             PIDController pidController = parentTank.GetComponent<PIDController>();

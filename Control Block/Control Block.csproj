@@ -157,7 +157,6 @@
     <ProjectReference Include="..\..\TechComponentInjector\TechComponentInjector\TechComponentInjector.csproj">
       <Project>{50a84443-8e82-4060-b2ca-2aa653724548}</Project>
       <Name>TechComponentInjector</Name>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

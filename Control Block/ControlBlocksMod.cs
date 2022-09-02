@@ -132,7 +132,7 @@ namespace Control_Block
             if (assembliesSearch.Count() > 0)
             {
                 floaterType = assembliesSearch.First().GetType("MotionBlocks.ModuleFloater");
-                floaterFixedUpdate = floaterType.GetMethod("OnFixedUpdate", BindingFlags.Instance| BindingFlags.Public | BindingFlags.NonPublic);
+                floaterFixedUpdate = floaterType.GetMethod("FixedUpdate", BindingFlags.Instance| BindingFlags.Public | BindingFlags.NonPublic);
 
                 MaxStrength = floaterType.GetField("MaxStrength", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                 MaxHeight = floaterType.GetField("MaxHeight", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
