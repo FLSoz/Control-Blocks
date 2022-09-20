@@ -422,7 +422,7 @@ namespace Control_Block
             tankAttachBlockAction = new Action<TankBlock, Tank>(this.BlockAdded);
             tankDetachBlockAction = new Action<TankBlock, Tank>(this.BlockRemoved);
             block.AttachedEvent.Subscribe(Attach);
-            block.DetachedEvent.Subscribe(Detatch);
+            block.DetachingEvent.Subscribe(Detatch);
             m_TargetAimer = gameObject.AddComponent<TargetAimer>();
             m_TargetAimer.Init(base.block, 0.5f, null);
         }

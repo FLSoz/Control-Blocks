@@ -399,7 +399,7 @@ namespace Control_Block
                 }
             }
             block.AttachedEvent.Subscribe(new Action(this.OnAttach));
-            block.DetachedEvent.Subscribe(new Action(this.OnDetach));
+            block.DetachingEvent.Subscribe(new Action(this.OnDetach));
             base.block.serializeEvent.Subscribe(new Action<bool, TankPreset.BlockSpec>(this.OnSerialize));
             base.block.serializeTextEvent.Subscribe(new Action<bool, TankPreset.BlockSpec>(this.OnSerializeText));
         }

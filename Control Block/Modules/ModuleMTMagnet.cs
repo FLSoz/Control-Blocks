@@ -294,7 +294,7 @@ namespace Control_Block
         private void OnPool()
         {
             block.AttachedEvent.Subscribe(OnAttach);
-            block.DetachedEvent.Subscribe(OnDetach);
+            block.DetachingEvent.Subscribe(OnDetach);
             if (Identity != MTMagTypes.Ball || Identity != MTMagTypes.LargeBall)
             foreach(Collider box in gameObject.GetComponentsInChildren<Collider>())
             {

@@ -127,7 +127,7 @@ namespace Control_Block
             base.OnPool();
             logger.Debug("Base pool complete");
             m_Segments = new List<ModuleBMSegment>();
-            block.DetachedEvent.Subscribe(ClearSegmentList);
+            block.DetachingEvent.Subscribe(ClearSegmentList);
             block.AttachedEvent.Subscribe(ClearSegmentList);
 
             Transform prefab = base.transform.GetOriginalPrefab<Transform>();
@@ -217,14 +217,14 @@ namespace Control_Block
         public void UIPointer(ModuleBMRail moduleBlockMover)
         {
             blockMoverPointer = moduleBlockMover;
-            if (blockMoverPointer != null) blockMoverPointer.block.DetachedEvent.Subscribe(ClearPointer);
+            if (blockMoverPointer != null) blockMoverPointer.block.DetachingEvent.Subscribe(ClearPointer);
         }
 
         public void ClearPointer(ModuleBMRail moduleBlockMover)
         {
             if (blockMoverPointer == moduleBlockMover)
             {
-                blockMoverPointer.block.DetachedEvent.Unsubscribe(ClearPointer);
+                blockMoverPointer.block.DetachingEvent.Unsubscribe(ClearPointer);
                 blockMoverPointer = null;
             }
         }
@@ -239,7 +239,7 @@ namespace Control_Block
         {
             if (blockMoverPointer != null)
             {
-                blockMoverPointer.block.DetachedEvent.Unsubscribe(ClearPointer);
+                blockMoverPointer.block.DetachingEvent.Unsubscribe(ClearPointer);
             }
         }
 
@@ -269,7 +269,7 @@ namespace Control_Block
         void OnPool()
         {
             logger.Debug("Starting pool");
-            block.DetachedEvent.Subscribe(ClearPointer);
+            block.DetachingEvent.Subscribe(ClearPointer);
            
             block.AttachedEvent.Subscribe(WakeupRailSystem);
 
