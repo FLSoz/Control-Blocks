@@ -682,7 +682,7 @@ namespace Control_Block
             }
 
             [HarmonyPatch(typeof(ModuleLinearMotionEngine))]
-            [HarmonyPatch("OnAttach")]
+            [HarmonyPatch("OnAttached")]
             public class PatchMLEAttach
             {
                 public static void Postfix(ref ModuleLinearMotionEngine __instance)
@@ -697,7 +697,7 @@ namespace Control_Block
             }
 
             [HarmonyPatch(typeof(ModuleLinearMotionEngine))]
-            [HarmonyPatch("OnDetach")]
+            [HarmonyPatch("OnDetaching")]
             public class PatchMLEDetach
             {
                 public static void Postfix(ref ModuleLinearMotionEngine __instance)
@@ -978,7 +978,7 @@ namespace Control_Block
 
             // Patch FanJet Thrust to add to thrust count
             [HarmonyPatch(typeof(ModuleBooster))]
-            [HarmonyPatch("OnAttach")]
+            [HarmonyPatch("OnAttached")]
             public class PatchBoosterAttach
             {
                 public static void Postfix(ref ModuleBooster __instance)
@@ -995,7 +995,7 @@ namespace Control_Block
 
             // Patch BoosterJet Thrust to add to thrust count
             [HarmonyPatch(typeof(ModuleBooster))]
-            [HarmonyPatch("OnDetach")]
+            [HarmonyPatch("OnDetaching")]
             public class PatchBoosterDetach
             {
                 public static void Postfix(ref ModuleBooster __instance)

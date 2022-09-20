@@ -127,8 +127,8 @@ namespace Control_Block
             base.OnPool();
             logger.Debug("Base pool complete");
             m_Segments = new List<ModuleBMSegment>();
-            block.DetachEvent.Subscribe(ClearSegmentList);
-            block.AttachEvent.Subscribe(ClearSegmentList);
+            block.DetachedEvent.Subscribe(ClearSegmentList);
+            block.AttachedEvent.Subscribe(ClearSegmentList);
 
             Transform prefab = base.transform.GetOriginalPrefab<Transform>();
             if (prefab != null)
@@ -217,14 +217,14 @@ namespace Control_Block
         public void UIPointer(ModuleBMRail moduleBlockMover)
         {
             blockMoverPointer = moduleBlockMover;
-            if (blockMoverPointer != null) blockMoverPointer.block.DetachEvent.Subscribe(ClearPointer);
+            if (blockMoverPointer != null) blockMoverPointer.block.DetachedEvent.Subscribe(ClearPointer);
         }
 
         public void ClearPointer(ModuleBMRail moduleBlockMover)
         {
             if (blockMoverPointer == moduleBlockMover)
             {
-                blockMoverPointer.block.DetachEvent.Unsubscribe(ClearPointer);
+                blockMoverPointer.block.DetachedEvent.Unsubscribe(ClearPointer);
                 blockMoverPointer = null;
             }
         }
@@ -239,7 +239,7 @@ namespace Control_Block
         {
             if (blockMoverPointer != null)
             {
-                blockMoverPointer.block.DetachEvent.Unsubscribe(ClearPointer);
+                blockMoverPointer.block.DetachedEvent.Unsubscribe(ClearPointer);
             }
         }
 
@@ -269,9 +269,9 @@ namespace Control_Block
         void OnPool()
         {
             logger.Debug("Starting pool");
-            block.DetachEvent.Subscribe(ClearPointer);
+            block.DetachedEvent.Subscribe(ClearPointer);
            
-            block.AttachEvent.Subscribe(WakeupRailSystem);
+            block.AttachedEvent.Subscribe(WakeupRailSystem);
 
             // int blockSessionID = ManMods.inst.GetBlockID(this.name);
             // APs = ManSpawn.inst.GetBlockPrefab((BlockTypes)blockSessionID).GetComponent<ModuleBMSegment>().APs;

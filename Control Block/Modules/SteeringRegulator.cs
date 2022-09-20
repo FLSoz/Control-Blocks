@@ -23,8 +23,8 @@ namespace Control_Block
         {
             base.block.serializeEvent.Subscribe(new Action<bool, TankPreset.BlockSpec>(this.OnSerialize));
             base.block.serializeTextEvent.Subscribe(new Action<bool, TankPreset.BlockSpec>(this.OnSerialize));
-            base.block.AttachEvent.Subscribe(OnAttach);
-            base.block.DetachEvent.Subscribe(OnDetach);
+            base.block.AttachedEvent.Subscribe(OnAttach);
+            base.block.DetachedEvent.Subscribe(OnDetach);
         }
 
         private void OnSerialize(bool saving, TankPreset.BlockSpec blockSpec)

@@ -398,8 +398,8 @@ namespace Control_Block
                     this.AddAxis(axis);
                 }
             }
-            block.AttachEvent.Subscribe(new Action(this.OnAttach));
-            block.DetachEvent.Subscribe(new Action(this.OnDetach));
+            block.AttachedEvent.Subscribe(new Action(this.OnAttach));
+            block.DetachedEvent.Subscribe(new Action(this.OnDetach));
             base.block.serializeEvent.Subscribe(new Action<bool, TankPreset.BlockSpec>(this.OnSerialize));
             base.block.serializeTextEvent.Subscribe(new Action<bool, TankPreset.BlockSpec>(this.OnSerializeText));
         }
