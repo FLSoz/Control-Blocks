@@ -84,16 +84,15 @@ namespace Control_Block.ModuleLoaders
             piston.SFX = TechAudio.SFXType.GSODrillSmall;
             piston.SFXVolume = 1f;
 
-            piston.starterAnim = new AttachPoint()
-            {
-                apPos = Vector3.up * 0.5f,
-                blockPos = IntVector3.up,
-                apDirForward = Vector3.up,
-                apDirUp = Vector3.forward,
-                AnimLength = 0.5f,
-                AnimPosChange = Vector3.up * 0.5f,
-                Tangent = Vector3.up
-            };
+            AttachPoint apObj = ScriptableObject.CreateInstance<AttachPoint>();
+            apObj.apPos = Vector3.up * 0.5f;
+            apObj.blockPos = IntVector3.up;
+            apObj.apDirForward = Vector3.up;
+            apObj.apDirUp = Vector3.forward;
+            apObj.AnimLength = 0.5f;
+            apObj.AnimPosChange = Vector3.up * 0.5f;
+            apObj.Tangent = Vector3.up;
+            piston.starterAnim = apObj;
         }
 
         internal bool SetBFRail(ModuleBMSegment rail, JObject data) {
@@ -106,36 +105,33 @@ namespace Control_Block.ModuleLoaders
             {
                 logger.Trace($"Setting Start AP:\n{startAP}");
                 JObject jObject = startAP as JObject;
-                rail.startAP = new AttachPoint()
-                {
-                    AnimLength = CustomParser.LenientTryParseFloat(jObject, "AnimLength", 1f),
-                    AnimPosChange = CustomParser.LenientTryParseVector3(jObject, "AnimPosChange", Vector3.zero),
-                    DisableFreeJoint = CustomParser.TryGetBool(jObject, false, "DisableFreeJoint"),
-                    Tangent = CustomParser.LenientTryParseVector3(jObject, "Tangent", Vector3.forward),
-                    apPos = CustomParser.LenientTryParseVector3(jObject, "apPos", Vector3.forward),
-                    blockPos = CustomParser.LenientTryParseIntVector3(jObject, "blockPos", IntVector3.forward),
-                    apDirForward = CustomParser.LenientTryParseIntVector3(jObject, "apDirForward", IntVector3.forward),
-                    apDirUp = CustomParser.LenientTryParseIntVector3(jObject, "apDirUp", IntVector3.forward)
-                };
+                AttachPoint apObj = ScriptableObject.CreateInstance<AttachPoint>();
+                apObj.AnimLength = CustomParser.LenientTryParseFloat(jObject, "AnimLength", 1f);
+                apObj.AnimPosChange = CustomParser.LenientTryParseVector3(jObject, "AnimPosChange", Vector3.zero);
+                apObj.DisableFreeJoint = CustomParser.TryGetBool(jObject, false, "DisableFreeJoint");
+                apObj.Tangent = CustomParser.LenientTryParseVector3(jObject, "Tangent", Vector3.forward);
+                apObj.apPos = CustomParser.LenientTryParseVector3(jObject, "apPos", Vector3.forward);
+                apObj.blockPos = CustomParser.LenientTryParseIntVector3(jObject, "blockPos", IntVector3.forward);
+                apObj.apDirForward = CustomParser.LenientTryParseIntVector3(jObject, "apDirForward", IntVector3.forward);
+                apObj.apDirUp = CustomParser.LenientTryParseIntVector3(jObject, "apDirUp", IntVector3.forward);
+                rail.startAP = apObj;
             }
 
             if (data.TryGetValue("EndAP", out JToken endAP) && endAP.Type == JTokenType.Object)
             {
                 logger.Trace($"Setting End AP:\n{endAP}");
                 JObject jObject = endAP as JObject;
-                rail.endAP = new AttachPoint()
-                {
-                    AnimLength = CustomParser.LenientTryParseFloat(jObject, "AnimLength", 1f),
-                    AnimPosChange = CustomParser.LenientTryParseVector3(jObject, "AnimPosChange", Vector3.zero),
-                    DisableFreeJoint = CustomParser.TryGetBool(jObject, false, "DisableFreeJoint"),
-                    Tangent = CustomParser.LenientTryParseVector3(jObject, "Tangent", Vector3.forward),
-                    apPos = CustomParser.LenientTryParseVector3(jObject, "apPos", Vector3.forward),
-                    blockPos = CustomParser.LenientTryParseIntVector3(jObject, "blockPos", IntVector3.forward),
-                    apDirForward = CustomParser.LenientTryParseIntVector3(jObject, "apDirForward", IntVector3.forward),
-                    apDirUp = CustomParser.LenientTryParseIntVector3(jObject, "apDirUp", IntVector3.forward)
-                };
+                AttachPoint apObj = ScriptableObject.CreateInstance<AttachPoint>();
+                apObj.AnimLength = CustomParser.LenientTryParseFloat(jObject, "AnimLength", 1f);
+                apObj.AnimPosChange = CustomParser.LenientTryParseVector3(jObject, "AnimPosChange", Vector3.zero);
+                apObj.DisableFreeJoint = CustomParser.TryGetBool(jObject, false, "DisableFreeJoint");
+                apObj.Tangent = CustomParser.LenientTryParseVector3(jObject, "Tangent", Vector3.forward);
+                apObj.apPos = CustomParser.LenientTryParseVector3(jObject, "apPos", Vector3.forward);
+                apObj.blockPos = CustomParser.LenientTryParseIntVector3(jObject, "blockPos", IntVector3.forward);
+                apObj.apDirForward = CustomParser.LenientTryParseIntVector3(jObject, "apDirForward", IntVector3.forward);
+                apObj.apDirUp = CustomParser.LenientTryParseIntVector3(jObject, "apDirUp", IntVector3.forward);
+                rail.endAP = apObj;
             }
-
             return true;
         }
 

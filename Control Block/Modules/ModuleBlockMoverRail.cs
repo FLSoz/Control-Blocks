@@ -6,6 +6,7 @@ using Control_Block;
 
 namespace Control_Block
 {
+    [Serializable]
     public class ModuleBMRail : ModuleBlockMover
     {
         private static Logger logger;
@@ -181,6 +182,7 @@ namespace Control_Block
         }
     }
 
+    [Serializable]
     public class ModuleBMSegment : Module
     {
         private static Logger logger;
@@ -311,7 +313,7 @@ namespace Control_Block
     /// An animation-appender in the format of 'From -> To'
     /// </summary>
     [Serializable]
-    public class AttachPoint
+    public class AttachPoint : ScriptableObject
     {
         /// <summary>
         /// For if the animation involves curves
