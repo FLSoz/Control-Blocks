@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using HarmonyLib;
 using UnityEngine;
 using Rewired;
+using System.CodeDom;
 
 namespace Control_Block
 {
@@ -219,6 +220,7 @@ namespace Control_Block
 
         #region UIPatches
         // Patch Altimeter UI to display the actual height
+        /* After 1.4.26.1, game now uses static GameUnits utility to get height to display
         [HarmonyPatch(typeof(UIAltimeter))]
         [HarmonyPatch("Show")]
         public class PatchAltimeter
@@ -230,6 +232,32 @@ namespace Control_Block
                 PatchAltimeter.m_SeaLevelYPos.SetValue(__instance, 0f);
                 PatchAltimeter.m_Imperial.SetValue(__instance, false);
                 return;
+            }
+        }
+        */
+        [HarmonyPatch(typeof(GameUnits))]
+        [HarmonyPatch("GetAltitudeText")]
+        public class PatchAltimeterText
+        {
+            public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                int status = 0;
+                foreach (var instruction in instructions)
+                {
+                    if (status == 0 || status > 1)
+                    {
+                        yield return instruction;
+                    }
+                    if (status == 1)
+                    {
+                        // this is after we added ldarg.0, and skipped calling GetAltitude. Will happen right before stloc.0
+                        yield return CodeInstruction.Call(typeof(UnityEngine.Mathf), "Floor");
+                    }
+                    if (status != 0 && status < 3)
+                    {
+                        status++;
+                    }
+                }
             }
         }
 
@@ -331,7 +359,7 @@ namespace Control_Block
                             Vector3 vector2 = Quaternion.AngleAxis(rbody.angularVelocity.magnitude * 57.29578f * ((float)PatchModuleGyro.m_ActiveStability.GetValue(__instance) / activeSpeed), rbody.angularVelocity) * __instance.block.tank.rootBlockTrans.up;
                             Vector3 vector3 = Vector3.up;
                             Vector3 right = __instance.block.tank.rootBlockTrans.right;
-                            if ((__instance.block.tank.BlockStateController == null || !__instance.block.tank.BlockStateController.IsKillswitched(BlockControllerModuleTypes.GyroTrim)) && Mathf.Abs(Vector3.Dot(vector3, right)) < 0.95f)
+                            if ((__instance.block.tank.BlockStateController == null || __instance.block.tank.BlockStateController.IsCategoryActive(ModuleControlCategory.GyroTrim)) && Mathf.Abs(Vector3.Dot(vector3, right)) < 0.95f)
                             {
                                 float controlTrim = (float)PatchModuleGyro.m_ControlTrim.GetValue(__instance);
                                 controlTrim = Mathf.MoveTowards(controlTrim, (float)PatchModuleGyro.m_ControlTrimTarget.GetValue(__instance), Time.deltaTime * (float)PatchModuleGyro.m_TrimAdjustSpeed.GetValue(__instance));
@@ -629,13 +657,13 @@ namespace Control_Block
             {
                 List<ModuleLinearMotionEngine.Effector> effectorList = (List<ModuleLinearMotionEngine.Effector>)PatchLinearMotionEngine.m_Effectors.GetValue(lme);
 
-                PIDController.GlobalDebugPrint("Finding thrust for: " + lme.block.name);
+                PIDController.logger.Debug("Finding thrust for: " + lme.block.name);
 
                 float sign = add ? 1f : -1f;
                 float effectorForce = (float)PatchLinearMotionEngine.m_ForcePerEffector.GetValue(lme);
                 foreach (ModuleLinearMotionEngine.Effector effector in effectorList)
                 {
-                    PIDController.GlobalDebugPrint("Effector: " + effector.TankLocalBoostDirection.ToString());
+                    PIDController.logger.Debug("Effector: " + effector.TankLocalBoostDirection.ToString());
 
                     #region MLE_Y
                     {
@@ -721,7 +749,7 @@ namespace Control_Block
             private static FieldInfo fanEffector = typeof(FanJet).GetField("m_Effector", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             private static FieldInfo m_FireStrengthCurrent = typeof(BoosterJet).GetField("m_FireStrengthCurrent", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             private static FieldInfo m_ParentBlock = typeof(BoosterJet).GetField("m_ParentBlock", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            private static FieldInfo m_FireControl = typeof(BoosterJet).GetField("m_FireControl", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            private static FieldInfo m_RequestedFireStrength = typeof(BoosterJet).GetField("m_RequestedFireStrength", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             private static FieldInfo m_BurnRate = typeof(BoosterJet).GetField("m_BurnRate", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             private static FieldInfo m_JetConsumesFuel = typeof(BoosterJet).GetField("m_ConsumesFuel", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -739,13 +767,13 @@ namespace Control_Block
                 List<BoosterJet> jetList = (List<BoosterJet>)PatchBooster.jets.GetValue(booster);
                 List<FanJet> fanList = (List<FanJet>)PatchBooster.fans.GetValue(booster);
 
-                PIDController.GlobalDebugPrint("Finding thrust for: " + booster.block.name);
+                PIDController.logger.Debug("Finding thrust for: " + booster.block.name);
 
                 float sign = add ? 1f : -1f;
 
                 foreach (BoosterJet jet in jetList)
                 {
-                    PIDController.GlobalDebugPrint("Jet: " + jet.LocalBoostDirection.ToString());
+                    PIDController.logger.Debug("Jet: " + jet.LocalBoostDirection.ToString());
                     float force = (float)PatchBooster.m_Force.GetValue(jet);
 
                     #region BoosterY
@@ -793,7 +821,7 @@ namespace Control_Block
                 }
                 foreach (FanJet fan in fanList)
                 {
-                    PIDController.GlobalDebugPrint("Fan: " + fan.LocalBoostDirection.ToString());
+                    PIDController.logger.Debug("Fan: " + fan.LocalBoostDirection.ToString());
 
                     float force = fan.force;
                     float backForce = fan.backForce;
@@ -853,20 +881,20 @@ namespace Control_Block
                 List<BoosterJet> jetList = (List<BoosterJet>)PatchBooster.jets.GetValue(booster);
                 List<FanJet> fanList = (List<FanJet>)PatchBooster.fans.GetValue(booster);
 
-                PIDController.GlobalDebugPrint("Finding torque for: " + booster.block.name);
+                PIDController.logger.Debug("Finding torque for: " + booster.block.name);
 
                 float sign = add ? 1f : -1f;
 
                 foreach (BoosterJet jet in jetList)
                 {
-                    PIDController.GlobalDebugPrint("Jet: " + jet.RotationContribution.ToString());
+                    PIDController.logger.Debug("Jet: " + jet.RotationContribution.ToString());
                     float force = (float)PatchBooster.m_Force.GetValue(jet);
                     Transform effector = (Transform)PatchBooster.boosterEffector.GetValue(jet);
                     Vector3 localDirection = pid.AttachedTank.transform.InverseTransformVector(effector.forward);
                     Vector3 localPosition = pid.AttachedTank.transform.InverseTransformVector(effector.position - pid.AttachedTank.WorldCenterOfMass);
 
                     Vector3 torque = Vector3.Cross(localPosition, force * localDirection);
-                    PIDController.GlobalDebugPrint($"    Torque: {torque}");
+                    PIDController.logger.Debug($"    Torque: {torque}");
 
                     #region BoosterY
                     {
@@ -912,7 +940,7 @@ namespace Control_Block
                 }
                 foreach (FanJet fan in fanList)
                 {
-                    PIDController.GlobalDebugPrint("Fan: " + fan.RotationContribution.ToString());
+                    PIDController.logger.Debug("Fan: " + fan.RotationContribution.ToString());
 
                     float force = fan.force;
                     float backForce = fan.backForce;
@@ -923,8 +951,8 @@ namespace Control_Block
 
                     Vector3 torque = Vector3.Cross(localPosition, force * localDirection);
                     Vector3 backTorque = Vector3.Cross(localPosition, backForce * -localDirection);
-                    PIDController.GlobalDebugPrint($"    Torque: {torque}");
-                    PIDController.GlobalDebugPrint($"    Neg Torque: {backTorque}");
+                    PIDController.logger.Debug($"    Torque: {torque}");
+                    PIDController.logger.Debug($"    Neg Torque: {backTorque}");
 
                     #region FanY
                     {
@@ -1010,11 +1038,13 @@ namespace Control_Block
             }
 
             // Patch ModuleBooster DriveControlInput to set BoosterJet's individual throttles
+            private static readonly FieldInfo m_IsEnabled = AccessTools.Field(typeof(ModuleBooster), "m_IsEnabled");
+            private static readonly MethodInfo CircuitControlled = AccessTools.Property(typeof(ModuleBooster), "CircuitControlled").GetMethod;
             [HarmonyPatch(typeof(ModuleBooster))]
             [HarmonyPatch("DriveControlInput")]
             public class PatchDriveControl
             {
-                public static bool Prefix(ref ModuleBooster __instance, ref TankControl.ControlState driveData)
+                public static bool Prefix(ModuleBooster __instance, TankControl.ControlState driveData)
                 {
                     PIDController pidController = __instance.block.tank.GetComponent<PIDController>();
                     if (pidController)
@@ -1031,7 +1061,7 @@ namespace Control_Block
                         }
                         else
                         {
-                            if (!__instance.enabled)
+                            if (!__instance.enabled || !(bool)m_IsEnabled.GetValue(__instance) || (bool)CircuitControlled.Invoke(__instance, null))
                             {
                                 return false;
                             }
@@ -1095,30 +1125,33 @@ namespace Control_Block
                                             isRequestedByDriveControl = (linearContribution >= 0f);
                                             if (isRequestedByDriveControl)
                                             {
-                                                PatchBooster.m_FireStrengthCurrent.SetValue(boosterJet, 1f);
+                                                boosterJet.SetFiring(true);
+                                            }
+                                            else
+                                            {
+                                                boosterJet.SetFireStrength(totalContribution);
                                             }
                                         }
                                         else
                                         {
-                                            // flag2 = (num6 > 0.1f);
-                                            if (totalContribution > 0f)
-                                            {
-                                                isRequestedByDriveControl = true;
-                                                PatchBooster.m_FireStrengthCurrent.SetValue(boosterJet, totalContribution);
-                                            }
+                                            boosterJet.SetFireStrength(totalContribution);
                                         }
                                     }
                                     else if (useBoostControls)
                                     {
                                         isRequestedByDriveControl = driveData.BoostJets;
                                         isFiringBoost = (isFiringBoost || isRequestedByDriveControl);
-                                        if (isFiringBoost)
-                                        {
-                                            PatchBooster.m_FireStrengthCurrent.SetValue(boosterJet, 1f);
-                                        }
+                                        boosterJet.SetFiring(isFiringBoost);
+                                    }
+                                    else
+                                    {
+                                        boosterJet.SetFiring(false);
                                     }
                                 }
-                                boosterJet.SetFiring(isRequestedByDriveControl);
+                                else
+                                {
+                                    boosterJet.SetFiring(false);
+                                }
                                 if (shouldBeAutoStabilised)
                                 {
                                     boosterJet.AutoStabiliseTank();
@@ -1133,7 +1166,7 @@ namespace Control_Block
             }
 
             // Patch BoosterJet to use throttle
-            [HarmonyPatch(typeof(BoosterJet))]
+            /* [HarmonyPatch(typeof(BoosterJet))]
             [HarmonyPatch("OnFixedUpdate")]
             public class PatchBoosterJet
             {
@@ -1202,6 +1235,7 @@ namespace Control_Block
                     return true;
                 }
             }
+            */
         }
         #endregion PatchThrottleThrustAccumulators
     }

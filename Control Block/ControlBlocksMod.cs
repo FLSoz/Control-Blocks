@@ -7,6 +7,8 @@ using HarmonyLib;
 using UnityEngine;
 using System.IO;
 using Control_Block.ModuleLoaders;
+using TTCustomNetworkingWrapper;
+using static Control_Block.ModuleBlockMover;
 
 namespace Control_Block
 {
@@ -44,6 +46,9 @@ namespace Control_Block
 
             // Module logging
             ModuleBlockMover.ConfigureLogger();
+            ModulePID.ConfigureLogger();
+            ModuleSteeringRegulator.ConfigureLogger();
+            PIDController.ConfigureLogger();
 
             Logger.TargetConfig railTarget = new Logger.TargetConfig
             {
@@ -56,8 +61,19 @@ namespace Control_Block
             // UI logging
         }
 
+        internal static CustomNetworkingWrapper<BlockMoverMessage> networkingWrapper;
+
         public void ManagedEarlyInit()
         {
+            // Networking
+            CustomNetworkingWrapper<BlockMoverMessage> wrapper = ManCustomNetHandler.GetNetworkingWrapper<BlockMoverMessage>(
+                "ControlBlocks",
+                ModuleBlockMover.ReceiveMoverChange,
+                ModuleBlockMover.PromptNewMoverChange
+            );
+            ManCustomNetHandler.RegisterNetworkingWrapper(wrapper);
+            networkingWrapper = wrapper;
+
             // Main mod logging
             ControlBlocksMod.ConfigureLogger();
 

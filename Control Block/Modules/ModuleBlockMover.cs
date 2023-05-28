@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using Control_Block;
+using TTCustomNetworkingWrapper;
+using System.Globalization;
 
 namespace Control_Block
 {
@@ -353,7 +355,7 @@ namespace Control_Block
                     isNoteOn = On,
                     adsrTime01 = 0f,
                 };
-                this.OnAudioTickUpdate(value, On ? new FMODEvent.FMODParams(SFXParam, Speed) : null);
+                this.OnAudioTickUpdate(value, On ? new FMODEvent.FMODParams(SFXParam, Speed) : FMODEvent.FMODParams.empty);
             }
         }
 
@@ -393,7 +395,7 @@ namespace Control_Block
             StarterBlocks = new List<TankBlock>();
             IgnoredBlocks = new List<TankBlock>();
             base.block.serializeEvent.Subscribe(new Action<bool, TankPreset.BlockSpec>(this.OnSerialize));
-            base.block.serializeTextEvent.Subscribe(new Action<bool, TankPreset.BlockSpec>(this.OnSerialize)); // Test later if serializing how it is wanted has any major change on it
+            base.block.serializeTextEvent.Subscribe(new Action<bool, TankPreset.BlockSpec, bool>(this.OnSerializeText)); // Test later if serializing how it is wanted has any major change on it
             ProcessOperations = new List<InputOperator>();
 
             parts = new Transform[PartCount];
@@ -821,6 +823,392 @@ namespace Control_Block
                         }
                     }
                 }
+            }
+        }
+
+        private void OnSerializeText(bool saving, TankPreset.BlockSpec context, bool OnTech)
+        {
+            string saveTxt = saving ? "Save" : "Load";
+            Type moduleType = base.GetType();
+            logger.Debug($"ModuleBlockMover OnSerializeText {saveTxt} {this.block.name}");
+            if (saving)
+            {
+                context.Store(moduleType, "_limitCenter", this._CENTERLIMIT.ToString(CultureInfo.InvariantCulture));
+                context.Store(moduleType, "_limitExtent", this._EXTENTLIMIT.ToString(CultureInfo.InvariantCulture));
+                context.Store(moduleType, "_currentValue", this.PVALUE.ToString(CultureInfo.InvariantCulture));
+                context.Store(moduleType, "_targetValue", this.VALUE.ToString(CultureInfo.InvariantCulture));
+                context.Store(moduleType, "_velocity", this.VELOCITY.ToString(CultureInfo.InvariantCulture));
+                context.Store(moduleType, "_jointStrength", this.SPRSTR.ToString(CultureInfo.InvariantCulture));
+                context.Store(moduleType, "_jointDampen", this.SPRDAM.ToString(CultureInfo.InvariantCulture));
+                context.Store(moduleType, "_moverType", this.moverType.ToString());
+                context.Store(moduleType, "_lockOffsetParent", this.LockJointBackPush.ToString(CultureInfo.InvariantCulture));
+                context.Store(moduleType, "_onlyLocalInput", this.LOCALINPUT.ToString(CultureInfo.InvariantCulture));
+                context.Store(moduleType, "_useLimits", this.UseLIMIT.ToString(CultureInfo.InvariantCulture));
+                context.Store(moduleType, "_processList", string.Join("\n", InputOperator.ProcessOperationsToStringArray(ProcessOperations)));
+                context.Store(moduleType, "_name", this.UIName.ToString(CultureInfo.InvariantCulture));
+                context.Store(moduleType, "_maxVelocity", this.MAXVELOCITY.ToString(CultureInfo.InvariantCulture));
+            }
+            else
+            {
+                SetDirty();
+                string foundUIName = context.Retrieve(moduleType, "_name");
+                if (!string.IsNullOrWhiteSpace(foundUIName))
+                    UIName = foundUIName;
+
+                #region PVALUE
+                {
+                    string text = context.Retrieve(base.GetType(), "_currentValue");
+                    if (!text.NullOrEmpty())
+                    {
+                        float value;
+                        if (float.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                        {
+                            this.PVALUE = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleBlockMover.OnSerializeText - Failed to parse _currentValue setting from save data on block '",
+                            base.block.name,
+                            "'. Expected float value but got '",
+                            text,
+                            "'. Setting to default value of 0!"
+                            }));
+                            this.PVALUE = 0f;
+                        }
+                    }
+                    else
+                    {
+                        this.PVALUE = 0f;
+                    }
+                }
+                #endregion PVALUE
+                #region VALUE
+                {
+                    string text = context.Retrieve(base.GetType(), "_targetValue");
+                    if (!text.NullOrEmpty())
+                    {
+                        float value;
+                        if (float.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                        {
+                            this.VALUE = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleBlockMover.OnSerializeText - Failed to parse _targetValue setting from save data on block '",
+                            base.block.name,
+                            "'. Expected float value but got '",
+                            text,
+                            "'. Setting to default value of 0!"
+                            }));
+                            this.VALUE = 0f;
+                        }
+                    }
+                    else
+                    {
+                        this.VALUE = 0f;
+                    }
+                }
+                #endregion VALUE
+                #region VELOCITY
+                {
+                    string text = context.Retrieve(base.GetType(), "_velocity");
+                    if (!text.NullOrEmpty())
+                    {
+                        float value;
+                        if (float.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                        {
+                            this.VELOCITY = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleBlockMover.OnSerializeText - Failed to parse _velocity setting from save data on block '",
+                            base.block.name,
+                            "'. Expected float value but got '",
+                            text,
+                            "'. Setting to default value of 0!"
+                            }));
+                            this.VELOCITY = 0f;
+                        }
+                    }
+                    else
+                    {
+                        this.VELOCITY = 0f;
+                    }
+                }
+                #endregion VELOCITY
+                #region MAXVELOCITY
+                {
+                    string text = context.Retrieve(base.GetType(), "_maxVelocity");
+                    if (!text.NullOrEmpty())
+                    {
+                        float value;
+                        if (float.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                        {
+                            this.MAXVELOCITY = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleBlockMover.OnSerializeText - Failed to parse _maxVelocity setting from save data on block '",
+                            base.block.name,
+                            "'. Expected float value but got '",
+                            text,
+                            "'. Setting to default value of 0!"
+                            }));
+                            this.MAXVELOCITY = 0f;
+                        }
+                    }
+                    else
+                    {
+                        this.MAXVELOCITY = 0f;
+                    }
+                }
+                #endregion MAXVELOCITY
+                #region SPRSTR
+                {
+                    string text = context.Retrieve(base.GetType(), "_jointStrength");
+                    if (!text.NullOrEmpty())
+                    {
+                        float value;
+                        if (float.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                        {
+                            this.SPRSTR = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleBlockMover.OnSerializeText - Failed to parse _jointStrength setting from save data on block '",
+                            base.block.name,
+                            "'. Expected float value but got '",
+                            text,
+                            "'. Setting to default value of 0!"
+                            }));
+                            this.SPRSTR = 0f;
+                        }
+                    }
+                    else
+                    {
+                        this.SPRSTR = 0f;
+                    }
+                }
+                #endregion SPRSTR
+                #region SPRDAM
+                {
+                    string text = context.Retrieve(base.GetType(), "_jointDampen");
+                    if (!text.NullOrEmpty())
+                    {
+                        float value;
+                        if (float.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                        {
+                            this.SPRDAM = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleBlockMover.OnSerializeText - Failed to parse _jointDampen setting from save data on block '",
+                            base.block.name,
+                            "'. Expected float value but got '",
+                            text,
+                            "'. Setting to default value of 0!"
+                            }));
+                            this.SPRDAM = 0f;
+                        }
+                    }
+                    else
+                    {
+                        this.SPRDAM = 0f;
+                    }
+                }
+                #endregion SPRDAM
+                #region _CENTERLIMIT
+                {
+                    string text = context.Retrieve(base.GetType(), "_limitCenter");
+                    if (!text.NullOrEmpty())
+                    {
+                        float value;
+                        if (float.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                        {
+                            this._CENTERLIMIT = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleBlockMover.OnSerializeText - Failed to parse _limitCenter setting from save data on block '",
+                            base.block.name,
+                            "'. Expected float value but got '",
+                            text,
+                            "'. Setting to default value of 0!"
+                            }));
+                            this._CENTERLIMIT = 0f;
+                        }
+                    }
+                    else
+                    {
+                        this._CENTERLIMIT = 0f;
+                    }
+                }
+                #endregion _CENTERLIMIT
+                #region _EXTENTLIMIT
+                {
+                    string text = context.Retrieve(base.GetType(), "_limitExtent");
+                    if (!text.NullOrEmpty())
+                    {
+                        float value;
+                        if (float.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                        {
+                            this._EXTENTLIMIT = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleBlockMover.OnSerializeText - Failed to parse _limitExtent setting from save data on block '",
+                            base.block.name,
+                            "'. Expected float value but got '",
+                            text,
+                            "'. Setting to default value of 0!"
+                            }));
+                            this._EXTENTLIMIT = 0f;
+                        }
+                    }
+                    else
+                    {
+                        this._EXTENTLIMIT = 0f;
+                    }
+                }
+                #endregion _EXTENTLIMIT
+
+                #region LOCALINPUT
+                {
+                    string text = context.Retrieve(base.GetType(), "_onlyLocalInput");
+                    if (!text.NullOrEmpty())
+                    {
+                        bool value;
+                        if (bool.TryParse(text, out value))
+                        {
+                            this.LOCALINPUT = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleBlockMover.OnSerializeText - Failed to parse _onlyLocalInput setting from save data on block '",
+                            base.block.name,
+                            "'. Expected bool value but got '",
+                            text,
+                            "'. Setting to default value of 0!"
+                            }));
+                            this.LOCALINPUT = false;
+                        }
+                    }
+                    else
+                    {
+                        this.LOCALINPUT = false;
+                    }
+                }
+                #endregion LOCALINPUT
+                #region LockJointBackPush
+                {
+                    string text = context.Retrieve(base.GetType(), "_lockOffsetParent");
+                    if (!text.NullOrEmpty())
+                    {
+                        bool value;
+                        if (bool.TryParse(text, out value))
+                        {
+                            this.LockJointBackPush = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleBlockMover.OnSerializeText - Failed to parse _lockOffsetParent setting from save data on block '",
+                            base.block.name,
+                            "'. Expected bool value but got '",
+                            text,
+                            "'. Setting to default value of 0!"
+                            }));
+                            this.LockJointBackPush = false;
+                        }
+                    }
+                    else
+                    {
+                        this.LockJointBackPush = false;
+                    }
+                }
+                #endregion LockJointBackPush
+                #region UseLIMIT
+                {
+                    string text = context.Retrieve(base.GetType(), "_useLimits");
+                    if (!text.NullOrEmpty())
+                    {
+                        bool value;
+                        if (bool.TryParse(text, out value))
+                        {
+                            this.UseLIMIT = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleBlockMover.OnSerializeText - Failed to parse _useLimits setting from save data on block '",
+                            base.block.name,
+                            "'. Expected bool value but got '",
+                            text,
+                            "'. Setting to default value of 0!"
+                            }));
+                            this.UseLIMIT = false;
+                        }
+                    }
+                    else
+                    {
+                        this.UseLIMIT = false;
+                    }
+                }
+                #endregion UseLIMIT
+
+                #region moverType
+                {
+                    string text = context.Retrieve(base.GetType(), "_moverType");
+                    if (!text.NullOrEmpty())
+                    {
+                        MoverType value;
+                        if (MoverType.TryParse(text, out value))
+                        {
+                            this.moverType = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleBlockMover.OnSerializeText - Failed to parse _moverType setting from save data on block '",
+                            base.block.name,
+                            "'. Expected enum value but got '",
+                            text,
+                            "'. Setting to default value of dynamic!"
+                            }));
+                            this.moverType = MoverType.Dynamic;
+                        }
+                    }
+                    else
+                    {
+                        this.moverType = MoverType.Dynamic;
+                    }
+                }
+                #endregion moverType
+
+                CannotBeFreeJoint = _cannotBeFreeJoint;
+                InputOperator.StringArrayToProcessOperations(context.Retrieve(moduleType, "_processList"), ref ProcessOperations);
+                Deserialized = true;
             }
         }
 
@@ -1338,7 +1726,6 @@ namespace Control_Block
             SetDirty();
         }
 
-        public const TTMsgType NetMsgMoverID = (TTMsgType)32115;
         internal static bool IsNetworkingInitiated = false;
 
         public static void InitiateNetworking()
@@ -1347,14 +1734,12 @@ namespace Control_Block
             {
                 throw new Exception("Something tried to initiate the networking component of BlockMovers twice!\n" + System.Reflection.Assembly.GetCallingAssembly().FullName);
             }
-            Nuterra.NetHandler.Subscribe<BlockMoverMessage>(NetMsgMoverID, ReceiveMoverChange, PromptNewMoverChange);
-            Nuterra.NetHandler.OnPlayerJoined += SyncPlayer;
+            // Nuterra.NetHandler.OnPlayerJoined += SyncPlayer;
             IsNetworkingInitiated = true;
         }
 
         public static void DeInitNetworking() {
-            Nuterra.NetHandler.Unsubscribe<BlockMoverMessage>(NetMsgMoverID);
-            Nuterra.NetHandler.OnPlayerJoined -= SyncPlayer;
+            // Nuterra.NetHandler.OnPlayerJoined -= SyncPlayer;
             IsNetworkingInitiated = false;
         }
 
@@ -1374,19 +1759,19 @@ namespace Control_Block
         {
             if (ManNetwork.IsHost)
             {
-                Nuterra.NetHandler.BroadcastMessageToAllExcept(NetMsgMoverID, message, true);
+                ControlBlocksMod.networkingWrapper.BroadcastToAll(message);
                 return;
             }
-            Nuterra.NetHandler.BroadcastMessageToServer(NetMsgMoverID, message);
+            ControlBlocksMod.networkingWrapper.SendMessageToServer(message);
         }
 
-        private static void PromptNewMoverChange(BlockMoverMessage obj, NetworkMessage netmsg)
+        internal static void PromptNewMoverChange(BlockMoverMessage obj, NetworkMessage netmsg)
         {
-            Nuterra.NetHandler.BroadcastMessageToAllExcept(NetMsgMoverID, obj, true, netmsg.conn.connectionId);
+            ControlBlocksMod.networkingWrapper.BroadcastToAllExceptClient(obj, netmsg.conn.connectionId, true);
             ReceiveMoverChange(obj, netmsg);
         }
 
-        private static void ReceiveMoverChange(BlockMoverMessage obj, NetworkMessage netmsg) => obj.block.GetComponent<ModuleBlockMover>().ReceiveFromNet(obj);
+        internal static void ReceiveMoverChange(BlockMoverMessage obj, NetworkMessage netmsg) => obj.block.GetComponent<ModuleBlockMover>().ReceiveFromNet(obj);
 
         private float LastSentVELOCITY = 0f;
 
@@ -1397,7 +1782,7 @@ namespace Control_Block
             //logger.Info($"Received new blockmover change: {block.cachedLocalPosition} set to {VALUE} with velocity {LastSentVELOCITY}");
         }
 
-        public class BlockMoverMessage : UnityEngine.Networking.MessageBase
+        public class BlockMoverMessage : MessageBase
         {
             public BlockMoverMessage()
             {

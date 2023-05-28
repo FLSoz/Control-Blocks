@@ -15,6 +15,12 @@ namespace Control_Block
     [Serializable()]
     public class ModulePID : Module
     {
+        private static Logger logger;
+        internal static void ConfigureLogger()
+        {
+            logger = new Logger("ModulePID");
+        }
+
         private PIDController attachedPID;
 
         public float targetHeight = 50f;
@@ -83,7 +89,7 @@ namespace Control_Block
 
         private void ClearParametersByAxis(PIDController.PIDParameters.PIDAxis axis)
         {
-            PIDController.GlobalDebugPrint($"ModulePID.ClearParametersByAxis {axis} {this.block.name}");
+            logger.Debug($"ModulePID.ClearParametersByAxis {axis} {this.block.name}");
             if (axis == PIDController.PIDParameters.PIDAxis.Accel)
             {
                 Destroy(this.m_AccelParameters);
@@ -118,7 +124,7 @@ namespace Control_Block
         public bool AddParameters(PIDController.PIDParameters parameters)
         {
             string parameterStr = ModulePID.ConvertOnSerialize(parameters).ToString(CultureInfo.InvariantCulture);
-            PIDController.GlobalDebugPrint($"ModulePID.AddParameters - {parameterStr}");
+            logger.Debug($"ModulePID.AddParameters - {parameterStr}");
             // this.availableAxesMask |= PIDController.PIDParameters.AxisMask(parameters.pidAxis);
             if (parameters.pidAxis == PIDController.PIDParameters.PIDAxis.Accel)
             {
@@ -175,7 +181,7 @@ namespace Control_Block
         public void OnUpdateParameters(PIDController.PIDParameters parameters, PIDController.PIDParameters.PIDAxis axis)
         {
             string parameterStr = ModulePID.ConvertOnSerialize(parameters).ToString(CultureInfo.InvariantCulture);
-            PIDController.GlobalDebugPrint($"ModulePID.OnUpdateParameters {axis} - {parameterStr} {this.block.name}");
+            logger.Debug($"ModulePID.OnUpdateParameters {axis} - {parameterStr} {this.block.name}");
             if (axis == PIDController.PIDParameters.PIDAxis.Accel)
             {
                 if (parameters != null)
@@ -301,37 +307,37 @@ namespace Control_Block
         // ASSUMES OVERWRITE IS FINE
         private void OnUpdateAllParameters()
         {
-            PIDController.GlobalDebugPrint($"ModulePID.OnUpdateAllParameters {this.block.name}");
+            logger.Debug($"ModulePID.OnUpdateAllParameters {this.block.name}");
             this.attachedPID.OnUpdateParameters(this);
         }
 
         public void OnGUIUpdateHover() {
-            PIDController.GlobalDebugPrint($"ModulePID.OnGUIUpdateHover {this.block.name}");
+            logger.Debug($"ModulePID.OnGUIUpdateHover {this.block.name}");
             this.attachedPID.OnUpdateHoverParameters(this);
         }
         public void OnGUIUpdateStrafe()
         {
-            PIDController.GlobalDebugPrint($"ModulePID.OnGUIUpdateStrafe {this.block.name}");
+            logger.Debug($"ModulePID.OnGUIUpdateStrafe {this.block.name}");
             this.attachedPID.OnUpdateStrafeParameters(this);
         }
         public void OnGUIUpdateAccel()
         {
-            PIDController.GlobalDebugPrint($"ModulePID.OnGUIUpdateAccel {this.block.name}");
+            logger.Debug($"ModulePID.OnGUIUpdateAccel {this.block.name}");
             this.attachedPID.OnUpdateAccelParameters(this);
         }
         public void OnGUIUpdatePitch()
         {
-            PIDController.GlobalDebugPrint($"ModulePID.OnGUIUpdatePitch {this.block.name}");
+            logger.Debug($"ModulePID.OnGUIUpdatePitch {this.block.name}");
             this.attachedPID.OnUpdatePitchParameters(this);
         }
         public void OnGUIUpdateRoll()
         {
-            PIDController.GlobalDebugPrint($"ModulePID.OnGUIUpdateRoll {this.block.name}");
+            logger.Debug($"ModulePID.OnGUIUpdateRoll {this.block.name}");
             this.attachedPID.OnUpdateRollParameters(this);
         }
         public void OnGUIUpdateYaw()
         {
-            PIDController.GlobalDebugPrint($"ModulePID.OnGUIUpdateYaw {this.block.name}");
+            logger.Debug($"ModulePID.OnGUIUpdateYaw {this.block.name}");
             this.attachedPID.OnUpdateYawParameters(this);
         }
         #endregion UpdateParameters
@@ -339,7 +345,7 @@ namespace Control_Block
         #region Reset_Error
         public void OnResetHoverError()
         {
-            PIDController.GlobalDebugPrint($"ModulePID.OnResetHoverError {this.block.name}");
+            logger.Debug($"ModulePID.OnResetHoverError {this.block.name}");
             if (this.attachedPID != null)
             {
                 this.attachedPID.ResetHoverError();
@@ -347,7 +353,7 @@ namespace Control_Block
         }
         public void OnResetStrafeError()
         {
-            PIDController.GlobalDebugPrint($"ModulePID.OnResetStrafeError {this.block.name}");
+            logger.Debug($"ModulePID.OnResetStrafeError {this.block.name}");
             if (this.attachedPID != null)
             {
                 this.attachedPID.ResetStrafeError();
@@ -355,7 +361,7 @@ namespace Control_Block
         }
         public void OnResetAccelError()
         {
-            PIDController.GlobalDebugPrint($"ModulePID.OnResetAccelError {this.block.name}");
+            logger.Debug($"ModulePID.OnResetAccelError {this.block.name}");
             if (this.attachedPID != null)
             {
                 this.attachedPID.ResetAccelError();
@@ -363,7 +369,7 @@ namespace Control_Block
         }
         public void OnResetPitchError()
         {
-            PIDController.GlobalDebugPrint($"ModulePID.OnResetPitchError {this.block.name}");
+            logger.Debug($"ModulePID.OnResetPitchError {this.block.name}");
             if (this.attachedPID != null)
             {
                 this.attachedPID.ResetPitchError();
@@ -371,7 +377,7 @@ namespace Control_Block
         }
         public void OnResetRollError()
         {
-            PIDController.GlobalDebugPrint($"ModulePID.OnResetRollError {this.block.name}");
+            logger.Debug($"ModulePID.OnResetRollError {this.block.name}");
             if (this.attachedPID != null)
             {
                 this.attachedPID.ResetRollError();
@@ -379,13 +385,22 @@ namespace Control_Block
         }
         public void OnResetYawError()
         {
-            PIDController.GlobalDebugPrint($"ModulePID.OnResetYawError {this.block.name}");
+            logger.Debug($"ModulePID.OnResetYawError {this.block.name}");
             if (this.attachedPID != null)
             {
                 this.attachedPID.ResetYawError();
             }
         }
         #endregion Reset_Error
+
+        public void ResetError()
+        {
+            logger.Debug($"ModulePID.ResetError {this.block.name}");
+            if (this.attachedPID != null)
+            {
+                this.attachedPID.ResetError();
+            }
+        }
 
         public void OnPool() {
             this.availableAxesMask = 0;
@@ -394,14 +409,14 @@ namespace Control_Block
                 // Register changes for the pid's axes to all other pids
                 if (this.ContainsPidAxis(axis))
                 {
-                    PIDController.GlobalDebugPrint($"ModulePID - register axis {axis} {this.block.name}");
+                    logger.Debug($"ModulePID - register axis {axis} {this.block.name}");
                     this.AddAxis(axis);
                 }
             }
             block.AttachedEvent.Subscribe(new Action(this.OnAttach));
             block.DetachingEvent.Subscribe(new Action(this.OnDetach));
             base.block.serializeEvent.Subscribe(new Action<bool, TankPreset.BlockSpec>(this.OnSerialize));
-            base.block.serializeTextEvent.Subscribe(new Action<bool, TankPreset.BlockSpec>(this.OnSerializeText));
+            base.block.serializeTextEvent.Subscribe(new Action<bool, TankPreset.BlockSpec, bool>(this.OnSerializeText));
         }
 
         private void OnAttach()
@@ -413,18 +428,21 @@ namespace Control_Block
                 this.attachedPID.ForceSpawn(base.block.tank);
             }
             this.attachedPID.RegisterPID(this);
-            if ((this.availableAxesMask & PIDController.PIDParameters.AxisMask(PIDController.PIDParameters.PIDAxis.Strafe)) != 0)
+            if (this.MatchesAxis(PIDController.PIDParameters.PIDAxis.Strafe))
             {
                 base.block.tank.control.AddThrottleControlEnabler(new Vector3(1, 0, 0));
             }
-            if ((this.availableAxesMask & PIDController.PIDParameters.AxisMask(PIDController.PIDParameters.PIDAxis.Hover)) != 0)
+            if (this.MatchesAxis(PIDController.PIDParameters.PIDAxis.Hover))
             {
                 base.block.tank.control.AddThrottleControlEnabler(new Vector3(0, 1, 0));
             }
-            if ((this.availableAxesMask & PIDController.PIDParameters.AxisMask(PIDController.PIDParameters.PIDAxis.Accel)) != 0)
+            if (this.MatchesAxis(PIDController.PIDParameters.PIDAxis.Accel))
             {
                 base.block.tank.control.AddThrottleControlEnabler(new Vector3(0, 0, 1));
             }
+
+            base.block.tank.AnchorEvent.Subscribe(new Action<ModuleAnchor, bool, bool>(OnAnchor));
+            // TankBeam.OnBeamEnabled.Subscribe(new Action<Tank, bool>(this.OnTankBeamEnabled));
         }
 
         private void OnDetach()
@@ -436,7 +454,7 @@ namespace Control_Block
             {
                 if (!this.MatchesAxis(axis))
                 {
-                    PIDController.GlobalDebugPrint($"ModulePID Clearing {axis} {this.block.name}");
+                    logger.Debug($"ModulePID Clearing {axis} {this.block.name}");
                     this.ClearParametersByAxis(axis);
                 }
             }
@@ -452,6 +470,26 @@ namespace Control_Block
             if (this.MatchesAxis(PIDController.PIDParameters.PIDAxis.Accel))
             {
                 base.block.tank.control.RemoveThrottleControlEnabler(new Vector3(0, 0, 1));
+            }
+
+            base.block.tank.AnchorEvent.Unsubscribe(new Action<ModuleAnchor, bool, bool>(OnAnchor));
+            // TankBeam.OnBeamEnabled.Unsubscribe(new Action<Tank, bool>(this.OnTankBeamEnabled));
+        }
+
+        // Reset error on build beam is handled by PIDController TechComponent
+        private void OnTankBeamEnabled(Tank tech, bool enabled)
+        {
+            if (base.block.IsAttached && base.block.tank == tech)
+            {
+                this.ResetError();
+            }
+        }
+
+        private void OnAnchor(ModuleAnchor anchor, bool anchored, bool fromAfterTechPopulate)
+        {
+            if (!anchored)
+            {
+                this.ResetError();
             }
         }
 
@@ -503,32 +541,32 @@ namespace Control_Block
         {
             if (axis == PIDController.PIDParameters.PIDAxis.Accel)
             {
-                PIDController.GlobalDebugPrint($"ModulePID - Force Replace Accel {this.block.name}");
+                logger.Debug($"ModulePID - Force Replace Accel {this.block.name}");
                 if (this.m_AccelParameters != null || force) this.m_AccelParameters = parameters;
             }
             else if (axis == PIDController.PIDParameters.PIDAxis.Strafe)
             {
-                PIDController.GlobalDebugPrint($"ModulePID - Force Replace Strafe {this.block.name}");
+                logger.Debug($"ModulePID - Force Replace Strafe {this.block.name}");
                 if (this.m_StrafeParameters != null || force) this.m_StrafeParameters = parameters;
             }
             else if (axis == PIDController.PIDParameters.PIDAxis.Hover)
             {
-                PIDController.GlobalDebugPrint($"ModulePID - Force Replace Hover {this.block.name}");
+                logger.Debug($"ModulePID - Force Replace Hover {this.block.name}");
                 if (this.m_HoverParameters != null || force) this.m_HoverParameters = parameters;
             }
             else if (axis == PIDController.PIDParameters.PIDAxis.Pitch)
             {
-                PIDController.GlobalDebugPrint($"ModulePID - Force Replace Pitch {this.block.name}");
+                logger.Debug($"ModulePID - Force Replace Pitch {this.block.name}");
                 if (this.m_PitchParameters != null || force) this.m_PitchParameters = parameters;
             }
             else if (axis == PIDController.PIDParameters.PIDAxis.Roll)
             {
-                PIDController.GlobalDebugPrint($"ModulePID - Force Replace Roll {this.block.name}");
+                logger.Debug($"ModulePID - Force Replace Roll {this.block.name}");
                 if (this.m_RollParameters != null || force) this.m_RollParameters = parameters;
             }
             else if (axis == PIDController.PIDParameters.PIDAxis.Yaw)
             {
-                PIDController.GlobalDebugPrint($"ModulePID - Force Replace Yaw {this.block.name}");
+                logger.Debug($"ModulePID - Force Replace Yaw {this.block.name}");
                 if (this.m_YawParameters != null || force) this.m_YawParameters = parameters;
             }
         }
@@ -536,7 +574,7 @@ namespace Control_Block
         private void OnSerialize(bool saving, TankPreset.BlockSpec blockSpec)
         {
             string saveTxt = saving ? "Save" : "Load";
-            PIDController.GlobalDebugPrint($"ModulePID OnSerialize {saveTxt} {this.block.name}");
+            logger.Debug($"ModulePID OnSerialize {saveTxt} {this.block.name}");
             if (saving)
             {
                 new ModulePID.SerialData
@@ -587,10 +625,10 @@ namespace Control_Block
             }
         }
 
-        private void OnSerializeText(bool saving, TankPreset.BlockSpec context)
+        private void OnSerializeText(bool saving, TankPreset.BlockSpec context, bool OnTech)
         {
             string saveTxt = saving ? "Save" : "Load";
-            PIDController.GlobalDebugPrint($"ModulePID OnSerializeText {saveTxt} {this.block.name}");
+            logger.Debug($"ModulePID OnSerializeText {saveTxt} {this.block.name}");
             if (saving)
             {
                 context.Store(base.GetType(), "_targetHeight", this.targetHeight.ToString(CultureInfo.InvariantCulture));
@@ -953,7 +991,7 @@ namespace Control_Block
 
                 public static ModulePID.SerialData.PIDParameters FromString(string inputStr)
                 {
-                    PIDController.GlobalDebugPrint("DESERIALIZE INPUT: " + inputStr);
+                    logger.Debug("DESERIALIZE INPUT: " + inputStr);
                     string[] data = inputStr.Replace("(", "").Replace(")", "").Split(':');
                     int length = data.Length;
 

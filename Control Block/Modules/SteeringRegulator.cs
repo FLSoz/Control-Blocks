@@ -5,11 +5,18 @@ using System.Text;
 using HarmonyLib;
 using UnityEngine;
 using System.Reflection;
+using System.Globalization;
 
 namespace Control_Block
 {
     class ModuleSteeringRegulator : Module
     {
+        private static Logger logger;
+        internal static void ConfigureLogger()
+        {
+            logger = new Logger("ModuleSteeringRegulator");
+        }
+
         public void OnSpawn()
         {
             //HoverMod = 4f; JetMod = 6f; TurbineMod = 2f;
@@ -22,7 +29,7 @@ namespace Control_Block
         private void OnPool()
         {
             base.block.serializeEvent.Subscribe(new Action<bool, TankPreset.BlockSpec>(this.OnSerialize));
-            base.block.serializeTextEvent.Subscribe(new Action<bool, TankPreset.BlockSpec>(this.OnSerialize));
+            base.block.serializeTextEvent.Subscribe(new Action<bool, TankPreset.BlockSpec, bool>(this.OnSerializeText));
             base.block.AttachedEvent.Subscribe(OnAttach);
             base.block.DetachingEvent.Subscribe(OnDetach);
         }
@@ -50,6 +57,139 @@ namespace Control_Block
                     MaxDist = serialData2.dist;
                     VelocityDampen = serialData2.dampen;
                 }
+            }
+        }
+
+        private void OnSerializeText(bool saving, TankPreset.BlockSpec context, bool OnTech)
+        {
+            string saveTxt = saving ? "Save" : "Load";
+            Type moduleType = base.GetType();
+            logger.Debug($"ModuleSteeringRegulator OnSerializeText {saveTxt} {this.block.name}");
+            if (saving)
+            {
+                context.Store(moduleType, "_drive", this.DriveMod.ToString(CultureInfo.InvariantCulture));
+                context.Store(moduleType, "_throttle", this.ThrottleMod.ToString(CultureInfo.InvariantCulture));
+                context.Store(moduleType, "_dist", this.MaxDist.ToString(CultureInfo.InvariantCulture));
+                context.Store(moduleType, "_dampen", this.VelocityDampen.ToString(CultureInfo.InvariantCulture));
+            }
+            else
+            {
+                #region DriveMod
+                {
+                    string text = context.Retrieve(base.GetType(), "drive");
+                    if (!text.NullOrEmpty())
+                    {
+                        float value;
+                        if (float.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                        {
+                            this.DriveMod = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleSteeringRegulator.OnSerializeText - Failed to parse drive setting from save data on block '",
+                            base.block.name,
+                            "'. Expected float value but got '",
+                            text,
+                            "'. Setting to default value of 0!"
+                            }));
+                            this.DriveMod = 0f;
+                        }
+                    }
+                    else
+                    {
+                        this.DriveMod = 0f;
+                    }
+                }
+                #endregion DriveMod
+                #region ThrottleMod
+                {
+                    string text = context.Retrieve(base.GetType(), "throttle");
+                    if (!text.NullOrEmpty())
+                    {
+                        float value;
+                        if (float.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                        {
+                            this.ThrottleMod = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleSteeringRegulator.OnSerializeText - Failed to parse throttle setting from save data on block '",
+                            base.block.name,
+                            "'. Expected float value but got '",
+                            text,
+                            "'. Setting to default value of 0!"
+                            }));
+                            this.ThrottleMod = 0f;
+                        }
+                    }
+                    else
+                    {
+                        this.ThrottleMod = 0f;
+                    }
+                }
+                #endregion ThrottleMod
+                #region MaxDist
+                {
+                    string text = context.Retrieve(base.GetType(), "dist");
+                    if (!text.NullOrEmpty())
+                    {
+                        float value;
+                        if (float.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                        {
+                            this.MaxDist = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleSteeringRegulator.OnSerializeText - Failed to parse dist setting from save data on block '",
+                            base.block.name,
+                            "'. Expected float value but got '",
+                            text,
+                            "'. Setting to default value of 0!"
+                            }));
+                            this.MaxDist = 0f;
+                        }
+                    }
+                    else
+                    {
+                        this.MaxDist = 0f;
+                    }
+                }
+                #endregion MaxDist
+                #region VelocityDampen
+                {
+                    string text = context.Retrieve(base.GetType(), "dampen");
+                    if (!text.NullOrEmpty())
+                    {
+                        float value;
+                        if (float.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                        {
+                            this.VelocityDampen = value;
+                        }
+                        else
+                        {
+                            d.LogError(string.Concat(new string[]
+                            {
+                            "ModuleSteeringRegulator.OnSerializeText - Failed to parse dampen setting from save data on block '",
+                            base.block.name,
+                            "'. Expected float value but got '",
+                            text,
+                            "'. Setting to default value of 0!"
+                            }));
+                            this.VelocityDampen = 0f;
+                        }
+                    }
+                    else
+                    {
+                        this.VelocityDampen = 0f;
+                    }
+                }
+                #endregion VelocityDampen
             }
         }
 

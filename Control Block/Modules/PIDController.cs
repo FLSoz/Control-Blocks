@@ -17,6 +17,12 @@ namespace Control_Block
     [DefaultExecutionOrder(Int32.MaxValue)]
     public class PIDController : TechComponent
     {
+        internal static Logger logger;
+        internal static void ConfigureLogger()
+        {
+            logger = new Logger("PIDController");
+        }
+
         #region PatchFields
         /// <value>FieldInfo to fetch the list of all <see cref="ModuleBooster"/> modules attached to a <see cref="Tank"/> via reflection</value>
         private static FieldInfo m_BoosterModules = typeof(TechBooster).GetField("m_BoosterModules", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -104,7 +110,7 @@ namespace Control_Block
 
             public void ResetError()
             {
-                // PIDController.GlobalDebugPrint($"PIDParameters.ResetError {this.pidAxis}");
+                // logger.Debug($"PIDParameters.ResetError {this.pidAxis}");
                 this.lastError = 0f;
                 this.cumulativeError = 0f;
             }
@@ -120,10 +126,10 @@ namespace Control_Block
             public float UpdateStep(float newError, ref string overridePrint, string prefix="", string postfix="")
             {
                 float dt = Time.fixedDeltaTime;
-                this.cumulativeError += newError;
+                this.cumulativeError += newError * dt;
 
                 float _kP = this.kP * newError;
-                float _kI = this.kI * this.cumulativeError * dt;
+                float _kI = this.kI * this.cumulativeError;
                 float _kD = this.kD * (newError - this.lastError) / dt;
                 this.lastError = newError;
                 float _out = _kP + _kI + _kD;
@@ -320,7 +326,7 @@ namespace Control_Block
                 }
                 else
                 {
-                    PIDController.GlobalDebugPrint("Accel PID Present");
+                    logger.Debug("Accel PID Present");
                 }
             }
             else if (axis == PIDController.PIDParameters.PIDAxis.Strafe)
@@ -332,7 +338,7 @@ namespace Control_Block
                 }
                 else
                 {
-                    PIDController.GlobalDebugPrint("Strafe PID Present");
+                    logger.Debug("Strafe PID Present");
                 }
             }
             else if (axis == PIDController.PIDParameters.PIDAxis.Hover)
@@ -344,7 +350,7 @@ namespace Control_Block
                 }
                 else
                 {
-                    PIDController.GlobalDebugPrint("Hover PID Present");
+                    logger.Debug("Hover PID Present");
                 }
             }
             else if (axis == PIDController.PIDParameters.PIDAxis.Pitch)
@@ -356,7 +362,7 @@ namespace Control_Block
                 }
                 else
                 {
-                    PIDController.GlobalDebugPrint("Pitch PID Present");
+                    logger.Debug("Pitch PID Present");
                 }
             }
             else if (axis == PIDController.PIDParameters.PIDAxis.Roll)
@@ -368,7 +374,7 @@ namespace Control_Block
                 }
                 else
                 {
-                    PIDController.GlobalDebugPrint("Roll PID Present");
+                    logger.Debug("Roll PID Present");
                 }
             }
             else if (axis == PIDController.PIDParameters.PIDAxis.Yaw)
@@ -380,7 +386,7 @@ namespace Control_Block
                 }
                 else
                 {
-                    PIDController.GlobalDebugPrint("Yaw PID Present");
+                    logger.Debug("Yaw PID Present");
                 }
             }
         }
@@ -414,7 +420,7 @@ namespace Control_Block
                 // Register changes for the pid's axes to all other pids
                 if (pid.MatchesAxis(axis))
                 {
-                    PIDController.GlobalDebugPrint($"REGISTER PID - matches axis {axis}");
+                    logger.Debug($"REGISTER PID - matches axis {axis}");
                     this.RegisterPIDAxis(pid, axis);
                 }
                 else
@@ -429,23 +435,23 @@ namespace Control_Block
         {
             #region SetClean
             this.m_PIDModules.Remove(pid);
-            PIDController.GlobalDebugPrint($"UNREGISTER PID {pid.block.name}");
+            logger.Debug($"UNREGISTER PID {pid.block.name}");
             foreach (PIDParameters.PIDAxis axis in Enum.GetValues(typeof(PIDParameters.PIDAxis)))
             {
                 if (pid.MatchesAxis(axis))
                 {
-                    PIDController.GlobalDebugPrint($"    matches axis {axis}");
+                    logger.Debug($"    matches axis {axis}");
                     HashSet<ModulePID> modules = this.RemoveModulesByAxis(pid, axis);
                     if (modules.Count == 0)
                     {
-                        PIDController.GlobalDebugPrint($"    NO PID REMAINING - clear axis {axis}");
+                        logger.Debug($"    NO PID REMAINING - clear axis {axis}");
                         this.NullPIDByAxis(axis);
                         this.currAxisMask &= ~PIDParameters.AxisMask(axis);
                         this.PropagateUpdatedParameters(null, axis);
                     }
                 }
             }
-            PIDController.GlobalDebugPrint($"PID {pid.block.name} UNREGISTERED");
+            logger.Debug($"PID {pid.block.name} UNREGISTERED");
             #endregion SetClean
 
             if (this.currAxisMask == 0)
@@ -508,7 +514,7 @@ namespace Control_Block
         // this one only called from ModulePID, force synchronizes everything
         public void OnUpdateParameters(ModulePID pid)
         {
-            PIDController.GlobalDebugPrint($"PIDController.OnUpdateParameters {pid.block.name}");
+            logger.Debug($"PIDController.OnUpdateParameters {pid.block.name}");
             if (this.AccelPID != null)
             {
                 if (pid.m_AccelParameters == null)
@@ -566,7 +572,7 @@ namespace Control_Block
         }
         public void OnUpdateParametersByAxis(ModulePID pid, PIDController.PIDParameters.PIDAxis axis)
         {
-            PIDController.GlobalDebugPrint($"PIDController.OnUpdateParametersByAxis {pid.block.name}, {axis}");
+            logger.Debug($"PIDController.OnUpdateParametersByAxis {pid.block.name}, {axis}");
             if (axis == PIDController.PIDParameters.PIDAxis.Accel)
             {
                 this.OnUpdateAccelParameters(pid);
@@ -594,7 +600,7 @@ namespace Control_Block
         }
         public void OnUpdateStrafeParameters(ModulePID pid)
         {
-            PIDController.GlobalDebugPrint($"PIDController.OnUpdateStrafeParameters {pid.block.name}");
+            logger.Debug($"PIDController.OnUpdateStrafeParameters {pid.block.name}");
             this.StrafePID.kI = pid.m_StrafeParameters.kI;
             this.StrafePID.kP = pid.m_StrafeParameters.kP;
             this.StrafePID.kD = pid.m_StrafeParameters.kD;
@@ -606,7 +612,7 @@ namespace Control_Block
         }
         public void OnUpdateHoverParameters(ModulePID pid)
         {
-            PIDController.GlobalDebugPrint($"PIDController.OnUpdateHoverParameters {pid.block.name}");
+            logger.Debug($"PIDController.OnUpdateHoverParameters {pid.block.name}");
             this.HoverPID.kI = pid.m_HoverParameters.kI;
             this.HoverPID.kP = pid.m_HoverParameters.kP;
             this.HoverPID.kD = pid.m_HoverParameters.kD;
@@ -622,7 +628,7 @@ namespace Control_Block
         }
         public void OnUpdateAccelParameters(ModulePID pid)
         {
-            PIDController.GlobalDebugPrint($"PIDController.OnUpdateAccelParameters {pid.block.name}");
+            logger.Debug($"PIDController.OnUpdateAccelParameters {pid.block.name}");
             this.AccelPID.kI = pid.m_AccelParameters.kI;
             this.AccelPID.kP = pid.m_AccelParameters.kP;
             this.AccelPID.kD = pid.m_AccelParameters.kD;
@@ -634,7 +640,7 @@ namespace Control_Block
         }
         public void OnUpdatePitchParameters(ModulePID pid)
         {
-            PIDController.GlobalDebugPrint($"PIDController.OnUpdatePitchParameters {pid.block.name}");
+            logger.Debug($"PIDController.OnUpdatePitchParameters {pid.block.name}");
             this.PitchPID.kI = pid.m_PitchParameters.kI;
             this.PitchPID.kP = pid.m_PitchParameters.kP;
             this.PitchPID.kD = pid.m_PitchParameters.kD;
@@ -647,7 +653,7 @@ namespace Control_Block
         }
         public void OnUpdateRollParameters(ModulePID pid)
         {
-            PIDController.GlobalDebugPrint($"PIDController.OnUpdateRollParameters {pid.block.name}");
+            logger.Debug($"PIDController.OnUpdateRollParameters {pid.block.name}");
             this.RollPID.kI = pid.m_RollParameters.kI;
             this.RollPID.kP = pid.m_RollParameters.kP;
             this.RollPID.kD = pid.m_RollParameters.kD;
@@ -660,7 +666,7 @@ namespace Control_Block
         }
         public void OnUpdateYawParameters(ModulePID pid)
         {
-            PIDController.GlobalDebugPrint($"PIDController.OnUpdateYawParameters {pid.block.name}");
+            logger.Debug($"PIDController.OnUpdateYawParameters {pid.block.name}");
             this.YawPID.kI = pid.m_YawParameters.kI;
             this.YawPID.kP = pid.m_YawParameters.kP;
             this.YawPID.kD = pid.m_YawParameters.kD;
@@ -670,7 +676,7 @@ namespace Control_Block
         }
         private void PropagateUpdatedParametersByAxis(PIDParameters.PIDAxis axis)
         {
-            PIDController.GlobalDebugPrint($"PropagateUpdatedParametersByAxis {axis}");
+            logger.Debug($"PropagateUpdatedParametersByAxis {axis}");
             if (axis == PIDController.PIDParameters.PIDAxis.Accel)
             {
                 this.PropagateUpdatedAccelParameters();
@@ -698,7 +704,7 @@ namespace Control_Block
         }
         public void PropagateUpdatedHoverParameters()
         {
-            PIDController.GlobalDebugPrint($"PIDController.PropagateUpdatedHoverParameters");
+            logger.Debug($"PIDController.PropagateUpdatedHoverParameters");
             foreach (ModulePID pidRef in this.m_PIDModules)
             {
                 pidRef.targetHeight = this.targetHeight;
@@ -711,7 +717,7 @@ namespace Control_Block
         }
         private void PropagateUpdatedStrafeParameters()
         {
-            PIDController.GlobalDebugPrint($"PIDController.PropagateUpdatedStrafeParameters");
+            logger.Debug($"PIDController.PropagateUpdatedStrafeParameters");
             foreach (ModulePID pidRef in this.m_PIDModules)
             {
                 pidRef.enableHoldPosition = this.enableHoldPosition;
@@ -720,7 +726,7 @@ namespace Control_Block
         }
         private void PropagateUpdatedAccelParameters()
         {
-            PIDController.GlobalDebugPrint($"PIDController.PropagateUpdatedAccelParameters");
+            logger.Debug($"PIDController.PropagateUpdatedAccelParameters");
             foreach (ModulePID pidRef in this.m_PIDModules)
             {
                 pidRef.enableHoldPosition = this.enableHoldPosition;
@@ -729,7 +735,7 @@ namespace Control_Block
         }
         private void PropagateUpdatedPitchParameters()
         {
-            PIDController.GlobalDebugPrint($"PIDController.PropagateUpdatedPitchParameters");
+            logger.Debug($"PIDController.PropagateUpdatedPitchParameters");
             foreach (ModulePID pidRef in this.m_PIDModules)
             {
                 pidRef.manualTargetChangeRate = this.manualTargetChangeRate;
@@ -739,7 +745,7 @@ namespace Control_Block
         }
         private void PropagateUpdatedRollParameters()
         {
-            PIDController.GlobalDebugPrint($"PIDController.PropagateUpdatedRollParameters");
+            logger.Debug($"PIDController.PropagateUpdatedRollParameters");
             foreach (ModulePID pidRef in this.m_PIDModules)
             {
                 pidRef.manualTargetChangeRate = this.manualTargetChangeRate;
@@ -749,7 +755,7 @@ namespace Control_Block
         }
         private void PropagateUpdatedParameters(PIDController.PIDParameters parameters, PIDParameters.PIDAxis axis)
         {
-            PIDController.GlobalDebugPrint($"PIDController.PropagateUpdatedParameters {axis}: {ModulePID.ConvertOnSerialize(parameters)}");
+            logger.Debug($"PIDController.PropagateUpdatedParameters {axis}: {ModulePID.ConvertOnSerialize(parameters)}");
             foreach (ModulePID pidRef in this.m_PIDModules)
             {
                 pidRef.OnUpdateParameters(parameters, axis);
@@ -760,7 +766,7 @@ namespace Control_Block
         #region Reset_Error
         public void ResetError()
         {
-            PIDController.GlobalDebugPrint($"PIDController.ResetError");
+            logger.Debug($"PIDController.ResetError");
             this.ResetAccelError();
             this.ResetHoverError();
             this.ResetStrafeError();
@@ -770,7 +776,7 @@ namespace Control_Block
         }
         public void ResetHoverError()
         {
-            PIDController.GlobalDebugPrint($"PIDController.ResetHoverError");
+            logger.Debug($"PIDController.ResetHoverError");
             if (this.HoverPID != null)
             {
                 this.HoverPID.ResetError();
@@ -778,7 +784,7 @@ namespace Control_Block
         }
         public void ResetStrafeError()
         {
-            PIDController.GlobalDebugPrint($"PIDController.ResetStrafeError");
+            logger.Debug($"PIDController.ResetStrafeError");
             if (this.StrafePID != null)
             {
                 this.StrafePID.ResetError();
@@ -786,7 +792,7 @@ namespace Control_Block
         }
         public void ResetAccelError()
         {
-            PIDController.GlobalDebugPrint($"PIDController.ResetAccelError");
+            logger.Debug($"PIDController.ResetAccelError");
             if (this.AccelPID != null)
             {
                 this.AccelPID.ResetError();
@@ -794,7 +800,7 @@ namespace Control_Block
         }
         public void ResetPitchError()
         {
-            PIDController.GlobalDebugPrint($"PIDController.ResetPitchError");
+            logger.Debug($"PIDController.ResetPitchError");
             if (this.PitchPID != null)
             {
                 this.PitchPID.ResetError();
@@ -802,7 +808,7 @@ namespace Control_Block
         }
         public void ResetRollError()
         {
-            PIDController.GlobalDebugPrint($"PIDController.ResetRollError");
+            logger.Debug($"PIDController.ResetRollError");
             if (this.RollPID != null)
             {
                 this.RollPID.ResetError();
@@ -810,7 +816,7 @@ namespace Control_Block
         }
         public void ResetYawError()
         {
-            PIDController.GlobalDebugPrint($"PIDController.ResetYawError");
+            logger.Debug($"PIDController.ResetYawError");
             if (this.YawPID != null)
             {
                 this.YawPID.ResetError();
@@ -838,7 +844,6 @@ namespace Control_Block
 
         private void FixedUpdate() {
             // get input into desired throttle changes
-
             if (!this.AttachedTank.beam.IsActive)
             {
                 Vector3 currentVelocity = this.AttachedTank.transform.InverseTransformVector(this.AttachedTank.rbody.velocity);
@@ -883,7 +888,7 @@ namespace Control_Block
                 Vector3 standardForce = -this.nonGravityThrust;
                 Vector3 standardTorque = -this.nonManagedTorque;
                 Vector3 relativeTargetPosition = this.AttachedTank.transform.InverseTransformVector(this.targetPosition - this.AttachedTank.WorldCenterOfMass);
-                // PIDController.GlobalDebugPrint($"OnFixedUpdate Commanded Action: {inputCommand}, CalculatedThrustPos: {this.calculatedThrustNegative}, CalculatedThrustNeg: {this.calculatedThrustPositive}");
+                // logger.Debug($"OnFixedUpdate Commanded Action: {inputCommand}, CalculatedThrustPos: {this.calculatedThrustNegative}, CalculatedThrustNeg: {this.calculatedThrustPositive}");
 
                 if (this.StrafePID != null && this.StrafePID.enabled)
                 {
@@ -1256,7 +1261,7 @@ namespace Control_Block
 
         public void ForceSpawn(Tank tech)
         {
-            PIDController.GlobalDebugPrint("Force Spawn PIDController");
+            logger.Debug("Force Spawn PIDController");
             this.PrePool();
             this._tech = tech;
             this.AttachedTank.ResetPhysicsEvent.Send();
@@ -1271,7 +1276,7 @@ namespace Control_Block
             {
                 foreach (ModuleBooster booster in boosterList)
                 {
-                    PIDController.GlobalDebugPrint("found booster: " + booster.block.name);
+                    logger.Debug("found booster: " + booster.block.name);
                     PIDControllerPatches.PatchBooster.GetThrustComponents(booster, this, true);
                     PIDControllerPatches.PatchBooster.GetTorqueComponents(booster, this, true);
                 }
@@ -1282,7 +1287,7 @@ namespace Control_Block
             {
                 foreach (ModuleLinearMotionEngine engine in lmeSet)
                 {
-                    PIDController.GlobalDebugPrint("found lme: " + engine.block.name);
+                    logger.Debug("found lme: " + engine.block.name);
                     PIDControllerPatches.PatchLinearMotionEngine.GetThrustComponents(engine, this, true);
                 }
             }
@@ -1291,12 +1296,12 @@ namespace Control_Block
         #region HookedFuncs
         private void PrePool()
         {
-            PIDController.GlobalDebugPrint("PIDController Pre Pool");
+            logger.Debug("PIDController Pre Pool");
         }
 
         private void OnPool()
         {
-            PIDController.GlobalDebugPrint("PIDController On Pool");
+            logger.Debug("PIDController On Pool");
             this._tech = base.Tech;
             this.AttachedTank.ResetPhysicsEvent.Send();
             this.CalculateTechThrottleThrust();

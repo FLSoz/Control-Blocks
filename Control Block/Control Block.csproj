@@ -110,7 +110,6 @@
     <Compile Include="ModuleLoaders\JSONModuleBlockMoverRail.cs" />
     <Compile Include="ModuleLoaders\JSONModuleBlockMoverSwivel.cs" />
     <Compile Include="Modules\BlockMoverConverter.cs" />
-    <Compile Include="Utils\NetHandler.cs" />
     <Compile Include="UI\BlockMoverIMGUI.cs" />
     <Compile Include="Patches.cs" />
     <Compile Include="Modules\ClusterBody.cs" />
@@ -157,6 +156,10 @@
     <ProjectReference Include="..\..\TechComponentInjector\TechComponentInjector\TechComponentInjector.csproj">
       <Project>{50a84443-8e82-4060-b2ca-2aa653724548}</Project>
       <Name>TechComponentInjector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TerraTechNetworkingWrapper\TerraTechNetworkingWrapper.csproj">
+      <Project>{48407d3c-d673-4fa4-8422-2e23377057b3}</Project>
+      <Name>TerraTechNetworkingWrapper</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
