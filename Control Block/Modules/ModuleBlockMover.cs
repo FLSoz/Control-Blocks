@@ -347,7 +347,7 @@ namespace Control_Block
             {
                 TechAudio.AudioTickData value = new TechAudio.AudioTickData
                 {
-                    module = this,
+                    block = this.block,
                     provider = this,
                     sfxType = SFX,
                     numTriggered = (On ? 1 : 0),

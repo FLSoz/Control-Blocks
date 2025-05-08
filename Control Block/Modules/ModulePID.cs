@@ -430,15 +430,15 @@ namespace Control_Block
             this.attachedPID.RegisterPID(this);
             if (this.MatchesAxis(PIDController.PIDParameters.PIDAxis.Strafe))
             {
-                base.block.tank.control.AddThrottleControlEnabler(new Vector3(1, 0, 0));
+                base.block.tank.control.AddThrottleControlEnabler(base.block.tank.transform, new Vector3(1, 0, 0), false);
             }
             if (this.MatchesAxis(PIDController.PIDParameters.PIDAxis.Hover))
             {
-                base.block.tank.control.AddThrottleControlEnabler(new Vector3(0, 1, 0));
+                base.block.tank.control.AddThrottleControlEnabler(base.block.tank.transform, new Vector3(0, 1, 0), false);
             }
             if (this.MatchesAxis(PIDController.PIDParameters.PIDAxis.Accel))
             {
-                base.block.tank.control.AddThrottleControlEnabler(new Vector3(0, 0, 1));
+                base.block.tank.control.AddThrottleControlEnabler(base.block.tank.transform, new Vector3(0, 0, 1), false);
             }
 
             base.block.tank.AnchorEvent.Subscribe(new Action<ModuleAnchor, bool, bool>(OnAnchor));
@@ -461,15 +461,15 @@ namespace Control_Block
 
             if (this.MatchesAxis(PIDController.PIDParameters.PIDAxis.Strafe))
             {
-                base.block.tank.control.RemoveThrottleControlEnabler(new Vector3(1, 0, 0));
+                base.block.tank.control.RemoveThrottleControlEnabler(base.block.tank.transform, new Vector3(1, 0, 0), false);
             }
             if (this.MatchesAxis(PIDController.PIDParameters.PIDAxis.Hover))
             {
-                base.block.tank.control.RemoveThrottleControlEnabler(new Vector3(0, 1, 0));
+                base.block.tank.control.RemoveThrottleControlEnabler(base.block.tank.transform, new Vector3(0, 1, 0), false);
             }
             if (this.MatchesAxis(PIDController.PIDParameters.PIDAxis.Accel))
             {
-                base.block.tank.control.RemoveThrottleControlEnabler(new Vector3(0, 0, 1));
+                base.block.tank.control.RemoveThrottleControlEnabler(base.block.tank.transform, new Vector3(0, 0, 1), false);
             }
 
             base.block.tank.AnchorEvent.Unsubscribe(new Action<ModuleAnchor, bool, bool>(OnAnchor));

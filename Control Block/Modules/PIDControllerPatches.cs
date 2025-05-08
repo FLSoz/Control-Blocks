@@ -74,9 +74,9 @@ namespace Control_Block
                         Vector3 oldInput = (Vector3)PatchTankControl.m_ThrottleInput.GetValue(__instance);
                         Vector3 oldTiming = (Vector3)PatchTankControl.m_ThrottleTiming.GetValue(__instance);
 
-                        object[] argsX = new object[] { throttleAxisEnableCount[0] > 0, inputMovement.x, oldThrottle.x, oldInput.x, oldTiming.x };
-                        object[] argsY = new object[] { throttleAxisEnableCount[1] > 0, inputMovement.y, oldThrottle.y, oldInput.y, oldTiming.y };
-                        object[] argsZ = new object[] { throttleAxisEnableCount[2] > 0, inputMovement.z, oldThrottle.z, oldInput.z, oldTiming.z };
+                        object[] argsX = new object[] { throttleAxisEnableCount[0] > 0, throttleAxisEnableCount[1] > 0, inputMovement.x, oldThrottle.x, oldInput.x, oldTiming.x };
+                        object[] argsY = new object[] { throttleAxisEnableCount[2] > 0, throttleAxisEnableCount[3] > 0, inputMovement.y, oldThrottle.y, oldInput.y, oldTiming.y };
+                        object[] argsZ = new object[] { throttleAxisEnableCount[4] > 0, throttleAxisEnableCount[5] > 0, inputMovement.z, oldThrottle.z, oldInput.z, oldTiming.z };
                         if (pidController.StrafePID == null)
                         {
                             PatchTankControl.ApplyThrottle.Invoke(__instance, argsX);
@@ -96,17 +96,17 @@ namespace Control_Block
                         }
 
                         // fix stuff after the ref
-                        Vector3 newThrottle = new Vector3((float) argsX[2], (float) argsY[2], (float) argsZ[2]);
-                        Vector3 newInput = new Vector3((float)argsX[3], (float)argsY[3], (float)argsZ[3]);
-                        Vector3 newTiming = new Vector3((float)argsX[4], (float)argsY[4], (float)argsZ[4]);
+                        Vector3 newThrottle = new Vector3((float) argsX[3], (float) argsY[3], (float) argsZ[3]);
+                        Vector3 newInput = new Vector3((float)argsX[4], (float)argsY[4], (float)argsZ[4]);
+                        Vector3 newTiming = new Vector3((float)argsX[5], (float)argsY[5], (float)argsZ[5]);
 
                         PatchTankControl.m_Throttle.SetValue(__instance, newThrottle);
                         PatchTankControl.m_ThrottleInput.SetValue(__instance, newInput);
                         PatchTankControl.m_ThrottleTiming.SetValue(__instance, newTiming);
 
-                        inputMovement.x = (float) argsX[1];
-                        inputMovement.y = (float) argsY[1];
-                        inputMovement.z = (float) argsZ[1];
+                        inputMovement.x = (float) argsX[2];
+                        inputMovement.y = (float) argsY[2];
+                        inputMovement.z = (float) argsZ[2];
 
                         // pitch/roll always use target angle - ignore
                         if (pidController.PitchPID && pidController.PitchPID.enabled)
@@ -130,25 +130,18 @@ namespace Control_Block
                             }
                         }
 
-                        controlState.m_State.m_InputMovement = inputMovement;
-                        controlState.m_State.m_InputRotation = inputRotation;
-                        controlState.m_State.m_ThrottleValues = newThrottle;
-                        controlState.m_State.m_BoostProps = (activeScheme.GetAxisMapping(MovementAxis.BoostPropellers).ReadRewiredInput(rewiredPlayer) > 0.01f);
-                        controlState.m_State.m_BoostJets = (activeScheme.GetAxisMapping(MovementAxis.BoostJets).ReadRewiredInput(rewiredPlayer) > 0.01f);
-                        if (Singleton.Manager<ManNetwork>.inst.IsMultiplayerAndInvulnerable())
+                        bool boostProps = (activeScheme.GetAxisMapping(MovementAxis.BoostPropellers).ReadRewiredInput(rewiredPlayer) > 0.01f);
+                        bool boostJets = (activeScheme.GetAxisMapping(MovementAxis.BoostJets).ReadRewiredInput(rewiredPlayer) > 0.01f);
+                        __instance.CollectMovementInput(inputMovement, inputRotation, newThrottle, boostProps, boostJets);
+
+                        if (!Singleton.Manager<ManNetwork>.inst.IsMultiplayerAndInvulnerable() || Singleton.Manager<ManNetwork>.inst.NetController.GameModeType == MultiplayerModeType.Deathmatch)
                         {
-                            if (Singleton.Manager<ManNetwork>.inst.NetController.GameModeType == MultiplayerModeType.Deathmatch)
-                            {
-                                __instance.FireControl = rewiredPlayer.GetButton(2);
-                            }
-                            else
-                            {
-                                __instance.FireControl = false;
-                            }
+                            __instance.FireControl = rewiredPlayer.GetButton(2);
                         }
                         else
                         {
-                            __instance.FireControl = rewiredPlayer.GetButton(2);
+                            // Why was this removed??
+                            // __instance.FireControl = false;
                         }
                         if (rewiredPlayer.GetButtonDown(3))
                         {
@@ -491,9 +484,11 @@ namespace Control_Block
             private static FieldInfo m_Effector = typeof(ModuleAirBrake).GetField("m_Effector", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             private static FieldInfo m_Deployed = typeof(ModuleAirBrake).GetField("m_Deployed", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             private static FieldInfo m_Strength = typeof(ModuleAirBrake).GetField("m_Strength", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            private static FieldInfo m_NoInput = typeof(ModuleAirBrake).GetField("m_NoInput", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            private static FieldInfo m_HasVelocity = typeof(ModuleAirBrake).GetField("m_HasVelocity", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             private static FieldInfo m_MinForceThreshold = typeof(ModuleAirBrake).GetField("m_MinForceThreshold", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-            private static MethodInfo SetHasVelocity = typeof(ModuleAirBrake).GetMethod("SetHasVelocity", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            private static MethodInfo SetDeployed = typeof(ModuleAirBrake).GetMethod("SetDeployed", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             public static bool Prefix(ref ModuleAirBrake __instance)
             {
                 Transform effector = (Transform)PatchModuleAirBrake.m_Effector.GetValue(__instance);
@@ -510,7 +505,10 @@ namespace Control_Block
                     vector3.y = vector3.y * vector3.y * Mathf.Sign(vector3.y) * strengthVector.y;
                     vector3.z = vector3.z * vector3.z * Mathf.Sign(vector3.z) * strengthVector.z;
 
-                    PatchModuleAirBrake.SetHasVelocity.Invoke(__instance, new object[] { vector3.magnitude > (float)PatchModuleAirBrake.m_MinForceThreshold.GetValue(__instance) });
+                    bool hasVelocity = vector3.magnitude > (float)PatchModuleAirBrake.m_MinForceThreshold.GetValue(__instance);
+                    m_HasVelocity.SetValue(__instance, hasVelocity);
+                    bool passiveBrakesEnabled = __instance.block.tank.PassiveBrakesEnabled;
+                    SetDeployed.Invoke(__instance, new object[] { passiveBrakesEnabled && (hasVelocity & (bool) m_NoInput.GetValue(__instance)) });
                     if ((bool)PatchModuleAirBrake.m_Deployed.GetValue(__instance))
                     {
                         vector2 = ((Module)__instance).transform.TransformVector(vector3);
@@ -744,7 +742,6 @@ namespace Control_Block
         {
             private static FieldInfo jets = typeof(ModuleBooster).GetField("jets", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             private static FieldInfo fans = typeof(ModuleBooster).GetField("fans", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            private static FieldInfo m_Force = typeof(BoosterJet).GetField("m_Force", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             private static FieldInfo boosterEffector = typeof(BoosterJet).GetField("m_Effector", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             private static FieldInfo fanEffector = typeof(FanJet).GetField("m_Effector", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             private static FieldInfo m_FireStrengthCurrent = typeof(BoosterJet).GetField("m_FireStrengthCurrent", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -760,6 +757,10 @@ namespace Control_Block
             private static FieldInfo m_EnablesThrottleControl = typeof(ModuleBooster).GetField("m_EnablesThrottleControl", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             private static FieldInfo m_ConsumesFuel = typeof(ModuleBooster).GetField("m_ConsumesFuel", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
+            // fan
+            private static FieldInfo backForce = AccessTools.Field(typeof(FanJet), "backForce");
+            private static FieldInfo m_Force = AccessTools.Field(typeof(Thruster), "m_Force");
+
             private static MethodInfo OnResetTechPhysics = typeof(ModuleBooster).GetMethod("OnResetTechPhysics", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
             public static void GetThrustComponents(ModuleBooster booster, PIDController pid, bool add)
@@ -773,12 +774,12 @@ namespace Control_Block
 
                 foreach (BoosterJet jet in jetList)
                 {
-                    PIDController.logger.Debug("Jet: " + jet.LocalBoostDirection.ToString());
+                    PIDController.logger.Debug("Jet: " + jet.LocalThrustDirection.ToString());
                     float force = (float)PatchBooster.m_Force.GetValue(jet);
 
                     #region BoosterY
                     {
-                        float vert = jet.LocalBoostDirection.y;
+                        float vert = jet.LocalThrustDirection.y;
                         if (vert > 0)
                         {
                             pid.calculatedThrustPositive.y += sign * force;
@@ -792,7 +793,7 @@ namespace Control_Block
 
                     #region BoosterX
                     {
-                        float strafe = jet.LocalBoostDirection.x;
+                        float strafe = jet.LocalThrustDirection.x;
                         if (strafe > 0)
                         {
                             pid.calculatedThrustPositive.x += sign * force;
@@ -806,7 +807,7 @@ namespace Control_Block
 
                     #region BoosterZ
                     {
-                        float accel = jet.LocalBoostDirection.z;
+                        float accel = jet.LocalThrustDirection.z;
                         if (accel > 0)
                         {
                             
@@ -821,14 +822,14 @@ namespace Control_Block
                 }
                 foreach (FanJet fan in fanList)
                 {
-                    PIDController.logger.Debug("Fan: " + fan.LocalBoostDirection.ToString());
+                    PIDController.logger.Debug("Fan: " + fan.LocalThrustDirection.ToString());
 
-                    float force = fan.force;
-                    float backForce = fan.backForce;
+                    float force = (float)PatchBooster.m_Force.GetValue(fan);
+                    float backForce = (float)PatchBooster.backForce.GetValue(fan);
 
                     #region FanY
                     {
-                        float vert = fan.LocalBoostDirection.y;
+                        float vert = fan.LocalThrustDirection.y;
                         if (vert > 0)
                         {
                             pid.calculatedThrustPositive.y += sign * force;
@@ -844,7 +845,7 @@ namespace Control_Block
 
                     #region FanX
                     {
-                        float strafe = fan.LocalBoostDirection.x;
+                        float strafe = fan.LocalThrustDirection.x;
                         if (strafe > 0)
                         {
                             pid.calculatedThrustPositive.x += sign * force;
@@ -860,7 +861,7 @@ namespace Control_Block
 
                     #region FanZ
                     {
-                        float accel = fan.LocalBoostDirection.z;
+                        float accel = fan.LocalThrustDirection.z;
                         if (accel > 0)
                         {
                             pid.calculatedThrustPositive.z += sign * force;
@@ -942,8 +943,8 @@ namespace Control_Block
                 {
                     PIDController.logger.Debug("Fan: " + fan.RotationContribution.ToString());
 
-                    float force = fan.force;
-                    float backForce = fan.backForce;
+                    float force = (float)PatchBooster.m_Force.GetValue(fan);
+                    float backForce = (float)PatchBooster.backForce.GetValue(fan);
 
                     Transform effector = (Transform)PatchBooster.fanEffector.GetValue(fan);
                     Vector3 localDirection = pid.AttachedTank.transform.InverseTransformVector(effector.forward);
@@ -1083,7 +1084,7 @@ namespace Control_Block
                                 if (useDriveControls)
                                 {
                                     float num2 = Vector3.Dot(driveData.InputRotation, fanJet.RotationContribution);
-                                    float num3 = Vector3.Dot(driveData.InputMovement + driveData.Throttle, fanJet.LocalBoostDirection);
+                                    float num3 = Vector3.Dot(driveData.InputMovement + driveData.Throttle, fanJet.LocalThrustDirection);
                                     num = Mathf.Clamp(num2 + num3, -1f, 1f);
                                     if (num != 0f)
                                     {
@@ -1101,7 +1102,7 @@ namespace Control_Block
                                     num = (driveData.BoostProps ? 1f : 0f);
                                     isFiringBoost = (isFiringBoost || driveData.BoostProps);
                                 }
-                                fanJet.SetSpin(num);
+                                fanJet.SetThrustRate(num);
                                 if (shouldBeAutoStabilised)
                                 {
                                     fanJet.AutoStabiliseTank();
@@ -1118,39 +1119,39 @@ namespace Control_Block
                                     if (useDriveControls)
                                     {
                                         float rotationalContribution = Vector3.Dot(driveData.InputRotation, boosterJet.RotationContribution);
-                                        float linearContribution = Vector3.Dot(driveData.InputMovement + driveData.Throttle, boosterJet.LocalBoostDirection);
+                                        float linearContribution = Vector3.Dot(driveData.InputMovement + driveData.Throttle, boosterJet.LocalThrustDirection);
                                         float totalContribution = Mathf.Clamp(rotationalContribution + linearContribution, 0f, 1f);
                                         if (useBoostControls && driveData.BoostJets)
                                         {
                                             isRequestedByDriveControl = (linearContribution >= 0f);
                                             if (isRequestedByDriveControl)
                                             {
-                                                boosterJet.SetFiring(true);
+                                                boosterJet.SetThrustRate(1.0f);
                                             }
                                             else
                                             {
-                                                boosterJet.SetFireStrength(totalContribution);
+                                                boosterJet.SetThrustRate(totalContribution);
                                             }
                                         }
                                         else
                                         {
-                                            boosterJet.SetFireStrength(totalContribution);
+                                            boosterJet.SetThrustRate(totalContribution);
                                         }
                                     }
                                     else if (useBoostControls)
                                     {
                                         isRequestedByDriveControl = driveData.BoostJets;
                                         isFiringBoost = (isFiringBoost || isRequestedByDriveControl);
-                                        boosterJet.SetFiring(isFiringBoost);
+                                        boosterJet.SetThrustRate(isFiringBoost ? 1.0f : 0.0f);
                                     }
                                     else
                                     {
-                                        boosterJet.SetFiring(false);
+                                        boosterJet.SetThrustRate(0.0f);
                                     }
                                 }
                                 else
                                 {
-                                    boosterJet.SetFiring(false);
+                                    boosterJet.SetThrustRate(0.0f);
                                 }
                                 if (shouldBeAutoStabilised)
                                 {
